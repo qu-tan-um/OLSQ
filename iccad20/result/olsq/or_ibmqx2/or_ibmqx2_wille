@@ -1,0 +1,114 @@
+preprocessing time: 0.00662s
+################### Basis ###################
+---------------- Layering -------------------
+(2 1) 
+(0 1) 
+(2 0) 
+(2 1) 
+(2 0) 
+(0 1) 
+---------------------------------------------
+----------------stats--------------
+(:ba-propagations         33
+ :eliminated-vars         6
+ :max-memory              3.83
+ :maxres-cores            6
+ :memory                  3.43
+ :num-allocs              5367844
+ :rlimit-count            279102
+ :sat-backjumps           69
+ :sat-conflicts           75
+ :sat-decisions           630
+ :sat-minimized-lits      114
+ :sat-mk-clause-2ary      10315
+ :sat-mk-clause-3ary      1670
+ :sat-mk-clause-nary      713
+ :sat-mk-var              1911
+ :sat-propagations-2ary   25252
+ :sat-propagations-3ary   8631
+ :sat-propagations-nary   512
+ :sat-subs-resolution-dyn 48
+ :sat-units               48)
+----------------obj-------------- 
+24.0
+##############################################
+nrGatesOriginalCurcuit: 17
+nrGatesReducedCurcuit: 6
+nrLayersReducedCurcuit: 6
+nrIgnoredUnaryGates: 11
+nrLogicalQubits: 3
+logicalQubits: 0 1 2 
+nrUsedPhysicalQubits: 5
+usedPhysicalQubits: 0 1 2 3 4 
+swapCost: 0
+reverseCost: 24
+totalCost: 24
+nrGatesMappedCurcuit: 30
+nrAllGatesMappedCurcuit: 41
+##############################################
+Optimum:######################################
+nrGatesOriginalCurcuit: 17
+nrGatesReducedCurcuit: 6
+nrLayersReducedCurcuit: 6
+nrIgnoredUnaryGates: 11
+nrLogicalQubits: 3
+logicalQubits: 0 1 2 
+nrUsedPhysicalQubits: 5
+usedPhysicalQubits: 0 1 2 3 4 
+swapCost: 0
+reverseCost: 24
+totalCost: 24
+nrGatesMappedCurcuit: 30
+nrAllGatesMappedCurcuit: 41
+----------------------------------------------
+000
+000
+100
+001
+010
+
+000
+000
+100
+001
+010
+
+000
+000
+100
+001
+010
+
+000
+000
+100
+001
+010
+
+000
+000
+100
+001
+010
+
+000
+000
+100
+001
+010
+
+----------------------------------------------
+( )
+( )
+( )
+( )
+( )
+----------------------------------------------
+1
+1
+1
+1
+1
+1
+##############################################
+Computation Time: 205ms

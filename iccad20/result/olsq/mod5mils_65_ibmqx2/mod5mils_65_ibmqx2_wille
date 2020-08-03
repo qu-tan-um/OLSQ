@@ -1,0 +1,214 @@
+preprocessing time: 0.004588s
+################### Basis ###################
+---------------- Layering -------------------
+(1 3) 
+(0 3) 
+(4 0) 
+(3 4) 
+(3 0) 
+(4 0) 
+(3 4) 
+(0 3) 
+(2 3) 
+(4 2) 
+(3 4) 
+(3 2) 
+(4 2) 
+(3 4) 
+(2 3) 
+(3 4) 
+---------------------------------------------
+----------------stats--------------
+(:ba-lemmas               2
+ :ba-propagations         187877
+ :ba-resolves             67
+ :ba-subsumes             4
+ :eliminated-vars         16
+ :max-memory              23.96
+ :maxres-cores            18
+ :memory                  23.39
+ :num-allocs              326833459
+ :rlimit-count            5709845
+ :sat-backjumps           1622
+ :sat-conflicts           1640
+ :sat-decisions           25478
+ :sat-del-clause          28
+ :sat-elim-clauses        5
+ :sat-elim-literals       67
+ :sat-minimized-lits      5511
+ :sat-mk-clause-2ary      55852
+ :sat-mk-clause-3ary      11038
+ :sat-mk-clause-nary      3622
+ :sat-mk-var              12811
+ :sat-propagations-2ary   3498043
+ :sat-propagations-3ary   446533
+ :sat-propagations-nary   20147
+ :sat-restarts            101
+ :sat-scc-elim-vars       6
+ :sat-subs-resolution     51
+ :sat-subs-resolution-dyn 1178
+ :sat-subsumed            21
+ :sat-units               192)
+----------------obj-------------- 
+66.0
+##############################################
+nrGatesOriginalCurcuit: 35
+nrGatesReducedCurcuit: 16
+nrLayersReducedCurcuit: 16
+nrIgnoredUnaryGates: 19
+nrLogicalQubits: 5
+logicalQubits: 0 1 2 3 4 
+nrUsedPhysicalQubits: 5
+usedPhysicalQubits: 0 1 2 3 4 
+swapCost: 2
+reverseCost: 64
+totalCost: 66
+nrGatesMappedCurcuit: 82
+nrAllGatesMappedCurcuit: 101
+##############################################
+Optimum:######################################
+nrGatesOriginalCurcuit: 35
+nrGatesReducedCurcuit: 16
+nrLayersReducedCurcuit: 16
+nrIgnoredUnaryGates: 19
+nrLogicalQubits: 5
+logicalQubits: 0 1 2 3 4 
+nrUsedPhysicalQubits: 5
+usedPhysicalQubits: 0 1 2 3 4 
+swapCost: 2
+reverseCost: 64
+totalCost: 66
+nrGatesMappedCurcuit: 82
+nrAllGatesMappedCurcuit: 101
+----------------------------------------------
+00001
+10000
+00010
+00100
+01000
+
+00001
+10000
+00010
+00100
+01000
+
+00001
+10000
+00010
+00100
+01000
+
+00001
+10000
+00010
+00100
+01000
+
+00001
+10000
+00010
+00100
+01000
+
+00001
+10000
+00010
+00100
+01000
+
+00001
+00010
+10000
+00100
+01000
+
+00001
+00010
+10000
+00100
+01000
+
+00001
+00010
+00100
+10000
+01000
+
+00001
+00010
+00100
+10000
+01000
+
+00001
+00010
+00100
+10000
+01000
+
+00001
+00010
+00100
+10000
+01000
+
+00001
+00010
+00100
+10000
+01000
+
+00001
+00010
+00100
+10000
+01000
+
+00001
+00010
+00100
+10000
+01000
+
+00001
+00010
+00100
+10000
+01000
+
+----------------------------------------------
+( )
+( )
+( )
+( )
+( )
+(0,2,1,3,4)
+( )
+(0,1,3,2,4)
+( )
+( )
+( )
+( )
+( )
+( )
+( )
+----------------------------------------------
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+##############################################
+Computation Time: 1515ms

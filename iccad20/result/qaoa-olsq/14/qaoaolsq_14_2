@@ -1,0 +1,100 @@
+[(3, 7), (3, 11), (3, 0), (7, 12), (7, 1), (4, 6), (4, 11), (4, 13), (6, 8), (6, 5), (5, 10), (5, 12), (10, 9), (10, 0), (9, 11), (9, 1), (1, 2), (2, 8), (2, 13), (8, 13), (12, 0)]
+num_swap 14  depth 19
+ZZ**0.75(2, 0) and ZZ**0.75(1, 5)
+ZZ**0.75(2, 3) and ZZ**0.75(5, 6)
+ZZ**0.75(5, 4) and SWAP(6, 7)
+SWAP(2, 6) and ZZ**0.75(4, 10) and SWAP(7, 8)
+ZZ**0.75(0, 2) and ZZ**0.75(6, 12) and ZZ**0.75(10, 11)
+SWAP(1, 2) and SWAP(11, 12)
+SWAP(1, 5) and ZZ**0.75(2, 3) and SWAP(6, 12) and ZZ**0.75(10, 11)
+SWAP(2, 3) and ZZ**0.75(4, 5) and SWAP(12, 18)
+ZZ**0.75(6, 2) and SWAP(3, 7) and ZZ**0.75(5, 11)
+SWAP(2, 3) and ZZ**0.75(7, 13)
+ZZ**0.75(0, 2)
+ZZ**0.75(6, 2)
+SWAP(6, 12)
+ZZ**0.75(2, 6)
+SWAP(6, 7)
+ZZ**0.75(7, 8)
+ZZ**0.75(7, 13)
+SWAP(7, 8)
+ZZ**0.75(7, 13)
+Input gate count = 21
+Trying maximal layers = 1...
+Trying maximal layers = 2...
+Compilation time = 19.69993495941162.
+gate 0 is at cycle 0 on edge (16,17)
+gate 1 is at cycle 0 on edge (17,18)
+gate 2 is at cycle 1 on edge (20,21)
+gate 3 is at cycle 0 on edge (15,16)
+gate 4 is at cycle 1 on edge (10,11)
+gate 5 is at cycle 0 on edge (10,11)
+gate 6 is at cycle 1 on edge (12,18)
+gate 7 is at cycle 0 on edge (5,11)
+gate 8 is at cycle 0 on edge (4,10)
+gate 9 is at cycle 1 on edge (15,16)
+gate 10 is at cycle 1 on edge (15,19)
+gate 11 is at cycle 1 on edge (14,15)
+gate 12 is at cycle 0 on edge (20,21)
+gate 13 is at cycle 0 on edge (19,20)
+gate 14 is at cycle 1 on edge (17,18)
+gate 15 is at cycle 1 on edge (11,17)
+gate 16 is at cycle 0 on edge (6,12)
+gate 17 is at cycle 1 on edge (5,6)
+gate 18 is at cycle 0 on edge (5,6)
+gate 19 is at cycle 0 on edge (4,5)
+gate 20 is at cycle 0 on edge (15,19)
+logical qubit 0 is mapped to node 19 in the beginning, node 20 at the end
+logical qubit 1 is mapped to node 12 in the beginning, node 11 at the end
+logical qubit 2 is mapped to node 6 in the beginning, node 6 at the end
+logical qubit 3 is mapped to node 17 in the beginning, node 21 at the end
+logical qubit 4 is mapped to node 11 in the beginning, node 12 at the end
+logical qubit 5 is mapped to node 14 in the beginning, node 15 at the end
+logical qubit 6 is mapped to node 10 in the beginning, node 16 at the end
+logical qubit 7 is mapped to node 16 in the beginning, node 10 at the end
+logical qubit 8 is mapped to node 4 in the beginning, node 5 at the end
+logical qubit 9 is mapped to node 21 in the beginning, node 17 at the end
+logical qubit 10 is mapped to node 20 in the beginning, node 19 at the end
+logical qubit 11 is mapped to node 18 in the beginning, node 18 at the end
+logical qubit 12 is mapped to node 15 in the beginning, node 14 at the end
+logical qubit 13 is mapped to node 5 in the beginning, node 4 at the end
+A swap gate finished at cycle 0 on edge (4, 5).
+A swap gate finished at cycle 0 on edge (11, 12).
+A swap gate finished at cycle 0 on edge (10, 16).
+A swap gate finished at cycle 0 on edge (14, 15).
+A swap gate finished at cycle 0 on edge (17, 21).
+A swap gate finished at cycle 0 on edge (19, 20).
+final depth = 6
+time 0
+ZZ (17, 18) 1
+ZZ (16, 15) 3
+ZZ (11, 10) 5
+ZZ (20, 19) 13
+ZZ (12, 6) 16
+ZZ (4, 5) 19
+time 1
+ZZ (17, 16) 0
+ZZ (11, 5) 7
+ZZ (10, 4) 8
+ZZ (20, 21) 12
+ZZ (15, 19) 20
+time 2
+ZZ (6, 5) 18
+SWAP (11, 12) 22
+SWAP (10, 16) 23
+SWAP (14, 15) 24
+SWAP (17, 21) 25
+SWAP (19, 20) 26
+time 3
+ZZ (21, 20) 2
+ZZ (10, 11) 4
+ZZ (15, 14) 11
+ZZ (17, 18) 14
+SWAP (4, 5) 21
+time 4
+ZZ (12, 18) 6
+ZZ (16, 15) 9
+ZZ (17, 11) 15
+ZZ (6, 5) 17
+time 5
+ZZ (15, 19) 10

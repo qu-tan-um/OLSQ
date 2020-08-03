@@ -1,0 +1,93 @@
+Input gate count = 23
+depth = 11
+gate count = OrderedDict([('cx', 10), ('t', 4), ('tdg', 4), ('x', 2), ('h', 2), ('s', 1)])
+Trying maximal depth = 11...
+Compilation time = 17.670798778533936s.
+result fidelity = 0.4634763129632616
+On edge 0, there are 4 two-qubit gates and 0 SWAP gates.
+On edge 3, there are 2 two-qubit gates and 0 SWAP gates.
+On edge 4, there are 1 two-qubit gates and 0 SWAP gates.
+On edge 7, there are 3 two-qubit gates and 0 SWAP gates.
+On node 0, there are 5 single-qubit gates and 1 measurement.
+On node 1, there are 2 single-qubit gates and 1 measurement.
+On node 4, there are 3 single-qubit gates and 1 measurement.
+On node 5, there are 3 single-qubit gates and 1 measurement.
+gate 0 is at cycle 0 on node 4
+gate 1 is at cycle 0 on node 5
+gate 2 is at cycle 0 on node 0
+gate 3 is at cycle 1 on edge (0,1)
+gate 4 is at cycle 1 on node 4
+gate 5 is at cycle 1 on node 5
+gate 6 is at cycle 2 on node 1
+gate 7 is at cycle 2 on node 0
+gate 8 is at cycle 2 on edge (4,5)
+gate 9 is at cycle 3 on edge (0,1)
+gate 10 is at cycle 4 on edge (0,4)
+gate 11 is at cycle 4 on edge (1,5)
+gate 12 is at cycle 5 on edge (4,5)
+gate 13 is at cycle 5 on edge (0,1)
+gate 14 is at cycle 7 on node 4
+gate 15 is at cycle 6 on node 5
+gate 16 is at cycle 6 on node 1
+gate 17 is at cycle 6 on node 0
+gate 18 is at cycle 8 on edge (4,5)
+gate 19 is at cycle 7 on edge (0,1)
+gate 20 is at cycle 8 on node 0
+gate 21 is at cycle 9 on edge (0,4)
+gate 22 is at cycle 10 on node 0
+logical qubit 0 is mapped to node 4 in the beginning, node 4 at the end
+logical qubit 1 is mapped to node 5 in the beginning, node 5 at the end
+logical qubit 2 is mapped to node 1 in the beginning, node 1 at the end
+logical qubit 3 is mapped to node 0 in the beginning, node 0 at the end
+       ┌──────────┐    ┌───┐    ┌───────────┐┌───┐          ┌───┐ ┌──────────┐»
+q_0: ──┤ U2(0,pi) ├────┤ X ├────┤ U1(-pi/4) ├┤ X ├──■───────┤ X ├─┤ U1(pi/4) ├»
+       └──────────┘    └─┬─┘    └┬──────────┤└─┬─┘  │  ┌───┐└─┬─┘┌┴──────────┤»
+q_1: ────────────────────■───────┤ U1(pi/4) ├──■────┼──┤ X ├──■──┤ U1(-pi/4) ├»
+                                 └──────────┘       │  └─┬─┘     └───────────┘»
+q_2: ───────────────────────────────────────────────┼────┼────────────────────»
+                                                    │    │                    »
+q_3: ───────────────────────────────────────────────┼────┼────────────────────»
+     ┌─────────────┐┌──────────┐                  ┌─┴─┐  │       ┌───────────┐»
+q_4: ┤ U3(pi,0,pi) ├┤ U1(pi/4) ├──────■───────────┤ X ├──┼────■──┤ U1(-pi/4) ├»
+     ├─────────────┤├──────────┤    ┌─┴─┐         └───┘  │  ┌─┴─┐├───────────┤»
+q_5: ┤ U3(pi,0,pi) ├┤ U1(pi/4) ├────┤ X ├────────────────■──┤ X ├┤ U1(-pi/4) ├»
+     └─────────────┘└──────────┘    └───┘                   └───┘└───────────┘»
+q_6: ─────────────────────────────────────────────────────────────────────────»
+                                                                              »
+q_7: ─────────────────────────────────────────────────────────────────────────»
+                                                                              »
+c_0: ═════════════════════════════════════════════════════════════════════════»
+                                                                              »
+c_1: ═════════════════════════════════════════════════════════════════════════»
+                                                                              »
+c_2: ═════════════════════════════════════════════════════════════════════════»
+                                                                              »
+c_3: ═════════════════════════════════════════════════════════════════════════»
+                                                                              »
+«     ┌───┐┌──────────┐        ┌──────────┐┌─┐
+«q_0: ┤ X ├┤ U1(pi/2) ├─────■──┤ U2(0,pi) ├┤M├
+«     └─┬─┘└──────────┘┌─┐  │  └──────────┘└╥┘
+«q_1: ──■──────────────┤M├──┼───────────────╫─
+«                      └╥┘  │               ║ 
+«q_2: ──────────────────╫───┼───────────────╫─
+«                       ║   │               ║ 
+«q_3: ──────────────────╫───┼───────────────╫─
+«                       ║ ┌─┴─┐    ┌─┐      ║ 
+«q_4: ──■───────────────╫─┤ X ├────┤M├──────╫─
+«     ┌─┴─┐    ┌─┐      ║ └───┘    └╥┘      ║ 
+«q_5: ┤ X ├────┤M├──────╫───────────╫───────╫─
+«     └───┘    └╥┘      ║           ║       ║ 
+«q_6: ──────────╫───────╫───────────╫───────╫─
+«               ║       ║           ║       ║ 
+«q_7: ──────────╫───────╫───────────╫───────╫─
+«               ║       ║           ║       ║ 
+«c_0: ══════════╬═══════╬═══════════╩═══════╬═
+«               ║       ║                   ║ 
+«c_1: ══════════╩═══════╬═══════════════════╬═
+«                       ║                   ║ 
+«c_2: ══════════════════╩═══════════════════╬═
+«                                           ║ 
+«c_3: ══════════════════════════════════════╩═
+«                                             
+depth = 12
+gate count = OrderedDict([('cx', 10), ('u1', 9), ('measure', 4), ('u2', 2), ('u3', 2)])

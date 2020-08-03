@@ -1,0 +1,10 @@
+before:
+depth 5
+x 22
+cx 15
+after:
+depth 10
+u3 22
+cx 18
+measure 16
+additional cx 3

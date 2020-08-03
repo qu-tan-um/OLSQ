@@ -1,0 +1,171 @@
+[(12, 13), (12, 15), (12, 9), (13, 17), (13, 18), (3, 10), (3, 11), (3, 14), (10, 0), (10, 16), (5, 19), (5, 2), (5, 6), (19, 8), (19, 1), (2, 4), (2, 18), (0, 17), (0, 20), (17, 8), (11, 20), (11, 4), (20, 6), (1, 21), (1, 14), (21, 16), (21, 9), (6, 9), (4, 14), (15, 16), (15, 7), (8, 7), (7, 18)]
+num_swap 48  depth 35
+ZZ**0.75(2, 0) and ZZ**0.75(1, 5) and ZZ**0.75(3, 7)
+SWAP(2, 6) and ZZ**0.75(5, 11) and ZZ**0.75(7, 13)
+ZZ**0.75(0, 2) and SWAP(4, 5) and ZZ**0.75(6, 12) and SWAP(7, 13)
+ZZ**0.75(1, 5) and SWAP(3, 7) and ZZ**0.75(4, 10)
+ZZ**0.75(2, 3) and ZZ**0.75(7, 8) and ZZ**0.75(10, 9)
+SWAP(9, 15) and SWAP(10, 16)
+SWAP(4, 10) and SWAP(14, 15)
+SWAP(9, 10)
+SWAP(9, 15) and SWAP(10, 11)
+SWAP(5, 11) and SWAP(14, 15)
+SWAP(5, 6) and ZZ**0.75(11, 17) and SWAP(15, 16)
+SWAP(2, 6) and SWAP(10, 11) and SWAP(17, 21)
+ZZ**0.75(0, 2) and SWAP(5, 11) and SWAP(6, 12) and SWAP(9, 10) and SWAP(20, 21)
+SWAP(1, 2) and ZZ**0.75(11, 17)
+SWAP(1, 5) and SWAP(10, 11)
+SWAP(1, 2) and SWAP(4, 5) and SWAP(9, 10) and SWAP(11, 12)
+ZZ**0.75(1, 5) and ZZ**0.75(3, 2) and SWAP(10, 16) and SWAP(12, 13)
+ZZ**0.75(10, 4) and ZZ**0.75(7, 13) and ZZ**0.75(12, 18) and SWAP(16, 17)
+SWAP(4, 5) and SWAP(7, 8) and SWAP(12, 13) and ZZ**0.75(15, 16) and ZZ**0.75(17, 18)
+SWAP(5, 6) and SWAP(15, 19)
+ZZ**0.75(7, 6) and SWAP(15, 16)
+SWAP(16, 17)
+SWAP(11, 17) and SWAP(16, 20)
+SWAP(5, 11) and ZZ**0.75(17, 21)
+SWAP(17, 21)
+ZZ**0.75(11, 17)
+SWAP(11, 17)
+SWAP(10, 11) and ZZ**0.75(17, 16)
+ZZ**0.75(10, 4) and ZZ**0.75(11, 12) and ZZ**0.75(16, 15)
+SWAP(6, 12)
+SWAP(5, 6)
+ZZ**0.75(4, 5) and ZZ**0.75(7, 6)
+ZZ**0.75(2, 6)
+SWAP(6, 12)
+ZZ**0.75(12, 18)
+Input gate count = 33
+Trying maximal layers = 1...
+Trying maximal layers = 2...
+Trying maximal layers = 3...
+Compilation time = 24607.70265865326.
+gate 0 is at cycle 1 on edge (1,2)
+gate 1 is at cycle 0 on edge (1,2)
+gate 2 is at cycle 2 on edge (1,5)
+gate 3 is at cycle 1 on edge (2,6)
+gate 4 is at cycle 2 on edge (3,7)
+gate 5 is at cycle 0 on edge (15,19)
+gate 6 is at cycle 1 on edge (19,20)
+gate 7 is at cycle 2 on edge (19,20)
+gate 8 is at cycle 2 on edge (9,10)
+gate 9 is at cycle 2 on edge (4,10)
+gate 10 is at cycle 0 on edge (12,13)
+gate 11 is at cycle 0 on edge (12,18)
+gate 12 is at cycle 2 on edge (16,17)
+gate 13 is at cycle 1 on edge (7,13)
+gate 14 is at cycle 2 on edge (12,18)
+gate 15 is at cycle 0 on edge (17,18)
+gate 16 is at cycle 2 on edge (7,13)
+gate 17 is at cycle 0 on edge (4,5)
+gate 18 is at cycle 1 on edge (10,16)
+gate 19 is at cycle 1 on edge (6,7)
+gate 20 is at cycle 1 on edge (16,20)
+gate 21 is at cycle 1 on edge (20,21)
+gate 22 is at cycle 1 on edge (15,16)
+gate 23 is at cycle 1 on edge (11,17)
+gate 24 is at cycle 0 on edge (20,21)
+gate 25 is at cycle 1 on edge (5,11)
+gate 26 is at cycle 0 on edge (10,11)
+gate 27 is at cycle 0 on edge (9,10)
+gate 28 is at cycle 2 on edge (20,21)
+gate 29 is at cycle 0 on edge (2,6)
+gate 30 is at cycle 2 on edge (0,2)
+gate 31 is at cycle 0 on edge (3,7)
+gate 32 is at cycle 0 on edge (7,8)
+logical qubit 0 is mapped to node 4 in the beginning, node 9 at the end
+logical qubit 1 is mapped to node 21 in the beginning, node 18 at the end
+logical qubit 2 is mapped to node 18 in the beginning, node 13 at the end
+logical qubit 3 is mapped to node 19 in the beginning, node 19 at the end
+logical qubit 4 is mapped to node 17 in the beginning, node 21 at the end
+logical qubit 5 is mapped to node 12 in the beginning, node 17 at the end
+logical qubit 6 is mapped to node 9 in the beginning, node 16 at the end
+logical qubit 7 is mapped to node 7 in the beginning, node 2 at the end
+logical qubit 8 is mapped to node 3 in the beginning, node 8 at the end
+logical qubit 9 is mapped to node 10 in the beginning, node 5 at the end
+logical qubit 10 is mapped to node 15 in the beginning, node 10 at the end
+logical qubit 11 is mapped to node 22 in the beginning, node 22 at the end
+logical qubit 12 is mapped to node 1 in the beginning, node 1 at the end
+logical qubit 13 is mapped to node 0 in the beginning, node 3 at the end
+logical qubit 14 is mapped to node 20 in the beginning, node 20 at the end
+logical qubit 15 is mapped to node 2 in the beginning, node 0 at the end
+logical qubit 16 is mapped to node 6 in the beginning, node 4 at the end
+logical qubit 17 is mapped to node 5 in the beginning, node 6 at the end
+logical qubit 18 is mapped to node 8 in the beginning, node 7 at the end
+logical qubit 19 is mapped to node 13 in the beginning, node 12 at the end
+logical qubit 20 is mapped to node 16 in the beginning, node 15 at the end
+logical qubit 21 is mapped to node 11 in the beginning, node 11 at the end
+A swap gate finished at cycle 0 on edge (0, 2).
+A swap gate finished at cycle 1 on edge (2, 3).
+A swap gate finished at cycle 0 on edge (3, 7).
+A swap gate finished at cycle 1 on edge (4, 5).
+A swap gate finished at cycle 0 on edge (5, 6).
+A swap gate finished at cycle 1 on edge (7, 8).
+A swap gate finished at cycle 0 on edge (4, 10).
+A swap gate finished at cycle 1 on edge (9, 10).
+A swap gate finished at cycle 1 on edge (12, 13).
+A swap gate finished at cycle 0 on edge (9, 15).
+A swap gate finished at cycle 0 on edge (12, 18).
+A swap gate finished at cycle 1 on edge (15, 16).
+A swap gate finished at cycle 1 on edge (17, 18).
+A swap gate finished at cycle 0 on edge (17, 21).
+A swap gate finished at cycle 0 on edge (20, 22).
+A swap gate finished at cycle 1 on edge (20, 22).
+final depth = 8
+time 0
+ZZ (1, 2) 1
+ZZ (19, 15) 5
+ZZ (12, 13) 10
+ZZ (18, 17) 15
+ZZ (4, 5) 17
+ZZ (21, 20) 24
+ZZ (9, 10) 27
+ZZ (3, 7) 31
+time 1
+ZZ (12, 18) 11
+ZZ (11, 10) 26
+ZZ (2, 6) 29
+ZZ (7, 8) 32
+SWAP (9, 15) 42
+SWAP (17, 21) 46
+SWAP (20, 22) 47
+time 2
+ZZ (20, 16) 20
+ZZ (17, 11) 23
+SWAP (0, 2) 33
+SWAP (3, 7) 35
+SWAP (5, 6) 37
+SWAP (4, 10) 39
+SWAP (12, 18) 43
+time 3
+ZZ (1, 2) 0
+ZZ (10, 16) 18
+ZZ (6, 7) 19
+ZZ (20, 21) 21
+ZZ (11, 5) 25
+time 4
+ZZ (2, 6) 3
+ZZ (19, 20) 6
+ZZ (13, 7) 13
+ZZ (16, 15) 22
+SWAP (4, 5) 36
+SWAP (9, 10) 40
+SWAP (17, 18) 45
+time 5
+ZZ (1, 5) 2
+ZZ (10, 9) 8
+SWAP (2, 3) 34
+SWAP (7, 8) 38
+SWAP (12, 13) 41
+SWAP (15, 16) 44
+SWAP (20, 22) 48
+time 6
+ZZ (3, 7) 4
+ZZ (19, 20) 7
+ZZ (10, 4) 9
+ZZ (17, 16) 12
+ZZ (12, 18) 14
+ZZ (0, 2) 30
+time 7
+ZZ (13, 7) 16
+ZZ (21, 20) 28

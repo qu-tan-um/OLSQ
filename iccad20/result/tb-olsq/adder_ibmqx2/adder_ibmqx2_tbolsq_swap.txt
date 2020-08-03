@@ -1,0 +1,16 @@
+before:
+depth 11
+cx 10
+t 4
+tdg 4
+x 2
+h 2
+s 1
+after:
+depth 16
+cx 13
+u1 9
+measure 4
+u2 2
+u3 2
+additional cx 3

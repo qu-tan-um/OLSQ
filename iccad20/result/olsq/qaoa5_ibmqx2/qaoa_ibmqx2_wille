@@ -1,0 +1,132 @@
+preprocessing time: 0.004587s
+################### Basis ###################
+---------------- Layering -------------------
+(0 1) 
+(0 1) 
+(1 2) 
+(1 2) 
+(2 3) 
+(2 3) 
+(3 4) 
+(3 4) 
+---------------------------------------------
+----------------stats--------------
+(:ba-propagations         58
+ :eliminated-vars         8
+ :max-memory              6.07
+ :maxres-cores            8
+ :memory                  5.31
+ :num-allocs              15484088
+ :rlimit-count            509533
+ :sat-backjumps           152
+ :sat-conflicts           160
+ :sat-decisions           2205
+ :sat-minimized-lits      147
+ :sat-mk-clause-2ary      23251
+ :sat-mk-clause-3ary      3717
+ :sat-mk-clause-nary      1107
+ :sat-mk-var              3135
+ :sat-propagations-2ary   49358
+ :sat-propagations-3ary   26201
+ :sat-propagations-nary   1097
+ :sat-subs-resolution-dyn 51
+ :sat-units               88)
+----------------obj-------------- 
+32.0
+##############################################
+nrGatesOriginalCurcuit: 22
+nrGatesReducedCurcuit: 8
+nrLayersReducedCurcuit: 8
+nrIgnoredUnaryGates: 14
+nrLogicalQubits: 5
+logicalQubits: 0 1 2 3 4 
+nrUsedPhysicalQubits: 5
+usedPhysicalQubits: 0 1 2 3 4 
+swapCost: 0
+reverseCost: 32
+totalCost: 32
+nrGatesMappedCurcuit: 40
+nrAllGatesMappedCurcuit: 54
+##############################################
+Optimum:######################################
+nrGatesOriginalCurcuit: 22
+nrGatesReducedCurcuit: 8
+nrLayersReducedCurcuit: 8
+nrIgnoredUnaryGates: 14
+nrLogicalQubits: 5
+logicalQubits: 0 1 2 3 4 
+nrUsedPhysicalQubits: 5
+usedPhysicalQubits: 0 1 2 3 4 
+swapCost: 0
+reverseCost: 32
+totalCost: 32
+nrGatesMappedCurcuit: 40
+nrAllGatesMappedCurcuit: 54
+----------------------------------------------
+10000
+01000
+00100
+00010
+00001
+
+10000
+01000
+00100
+00010
+00001
+
+10000
+01000
+00100
+00010
+00001
+
+10000
+01000
+00100
+00010
+00001
+
+10000
+01000
+00100
+00010
+00001
+
+10000
+01000
+00100
+00010
+00001
+
+10000
+01000
+00100
+00010
+00001
+
+10000
+01000
+00100
+00010
+00001
+
+----------------------------------------------
+( )
+( )
+( )
+( )
+( )
+( )
+( )
+----------------------------------------------
+1
+1
+1
+1
+1
+1
+1
+1
+##############################################
+Computation Time: 289ms

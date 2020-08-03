@@ -1,0 +1,14 @@
+before:
+depth 47
+cx 40
+t 18
+tdg 17
+h 14
+sdg 2
+after:
+depth 71
+cx 64
+u1 37
+u2 14
+measure 9
+additional cx 24
