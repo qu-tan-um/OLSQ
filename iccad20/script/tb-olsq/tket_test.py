@@ -14,7 +14,7 @@ import sys
 
 
 def tket_run(file_name, device_name):
-    connection_list = qcdevice(device_name).connection_list
+    connection_list = qcdevice(device_name).list_qubit_edge
     circ = circuit_from_qasm(file_name)
     circ.measure_all()
     arc = Architecture(connection_list)

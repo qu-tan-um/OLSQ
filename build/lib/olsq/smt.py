@@ -26,7 +26,7 @@ new_file_name = "result/paper/" + file_name.split('/')[-1].replace('.qasm', "_{}
 
 device_test = qcdevice(device_name)
 N = device_test.count_physical_qubit
-e = device_test.list_qubit_edge
+e = device_test.connection_list
 S = device_test.swap_duration
 
 [M, g, gate_spec] = read_qasm(file_name)
@@ -37,11 +37,11 @@ K = len(e)
 L = len(g)
 print("Input gate count = {}".format(L))
 if objective_name == "fidelity":
-    f_1qbg = [int(1000 * math.log(device_test.list_fidelity_single[n])) for n in range(N)]
+    f_1qbg = [int(1000 * math.log(device_test.fidelity_single_qubit[n])) for n in range(N)]
     #print(f_1qbg)
-    f_2qbg = [int(1000 * math.log(device_test.list_fidelity_two[k])) for k in range(K)]
+    f_2qbg = [int(1000 * math.log(device_test.fidelity_two_qubit[k])) for k in range(K)]
     #print(f_2qbg)
-    f_meas = [int(1000 * math.log(device_test.list_fidelity_measure[n])) for n in range(N)]
+    f_meas = [int(1000 * math.log(device_test.fidelity_measurement[n])) for n in range(N)]
     #print(f_meas)
 G_2 = list()
 G_1 = list()
