@@ -7,13 +7,13 @@
 ## Installation
 
 ```
-pip install -i https://test.pypi.org/simple/ --no-deps olsq==0.1.dev7
+pip install -i https://test.pypi.org/simple/ --no-deps olsq==0.1.dev8
 ```
 Please make sure that you have the `networkx` version `>=2.5` and `z3-solver` version `>=4.8.9.0` in your Python environment.
 
 ## Brief Tutorial
 
-The code blacks in this section consist an example usage of OLSQ.
+The code blocks in this section consist an example usage of OLSQ.
 We also add an interface to [Cirq](https://github.com/quantumlib/Cirq), check out the next section as well.
 
 ### Initialization
@@ -25,7 +25,7 @@ from olsq import OLSQ
 lsqc_solver = OLSQ_cirq("depth", "normal")
 ```
 
-There are two argument for the constructor of OLSQ: `objective_name` and `mode`.
+There are two argument in the constructor of OLSQ: `objective_name` and `mode`.
 - `objective_name` can be `depth`, `swap`, or `fidelity`.
 - `mode` can be `normal`, or `transition`.
 The latter stands for TB-OLSQ in the paper.
@@ -39,7 +39,7 @@ circuit = "OPENQASM 2.0;\n include \"qelib1.inc\";\n qreg q[3];\n h q[2];\n cx q
 lsqc_solver.setprogram(circuit)
 ```
 
-The example circuit is a Toffoli gate
+The example circuit above is a Toffoli gate
 ```
 """
                                                        ┌───┐      
@@ -62,7 +62,7 @@ lsqc_solver.setdevice(qcdevice("dev", 5, [(0, 1), (1, 2), (1, 3), (3, 4)], 3))
 ```
 
 We only use a few properties of the QC device, so we use a minimalist class `qcdevice` to store these values.
-To construct a `qcdevice`, the arguments are as below. 
+To construct a `qcdevice`, The below arguments are required. 
 (The last three are only for fidelity optimization.)
 1. `name`
 2. `nqubits`: the number of physical qubits
@@ -80,8 +80,12 @@ result = lsqc_solver.solve()
 print(result)
 ```
 
-The `solve` method can also takes an optional arguemnt of file name.
-The result of this specific example is as below.
+The `solve` method can also takes two optional arguemnts
+- `output_mode` can be `"IR"` or `"QASM"`. The former means our own IR.
+  
+- `output_file_name`
+
+The result of the above example is as below.
 ```
 """
                                                  ┌───┐     ┌───┐┌───┐ ┌───┐      ┌─┐      

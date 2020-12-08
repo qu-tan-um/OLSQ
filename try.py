@@ -12,7 +12,7 @@ print(circuit)
 device = ["dev", 5, [(0, 1), (1, 2), (1, 3), (3, 4)], 3]
 
 from olsq.olsq_cirq import OLSQ_cirq
-lsqc_solver = OLSQ_cirq("swap", "normal")
+lsqc_solver = OLSQ_cirq("depth", "transition")
 lsqc_solver.setdevicegraph(ccr.gridqubits_to_graph_device([GridQubit(0, 0), GridQubit(0, 1), GridQubit(1, 0), GridQubit(1, 1)]))
 lsqc_solver.setprogram(circuit)
 circuit_new, mapping = lsqc_solver.solve()
