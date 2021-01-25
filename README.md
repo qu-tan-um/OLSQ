@@ -7,7 +7,7 @@
 ## Installation
 
 ```
-pip install -i https://test.pypi.org/simple/ --no-deps olsq==0.1.dev8
+pip install -i https://test.pypi.org/simple/ --no-deps olsq==0.1.dev9
 ```
 Please make sure that you have the `networkx` version `>=2.5` and `z3-solver` version `>=4.8.9.0` in your Python environment.
 
@@ -22,14 +22,14 @@ We also add an interface to [Cirq](https://github.com/quantumlib/Cirq), check ou
 from olsq import OLSQ
 
 
-lsqc_solver = OLSQ_cirq("depth", "normal")
+lsqc_solver = OLSQ("depth", "normal")
 ```
 
 There are two argument in the constructor of OLSQ: `objective_name` and `mode`.
 - `objective_name` can be `depth`, `swap`, or `fidelity`.
 - `mode` can be `normal`, or `transition`.
 The latter stands for TB-OLSQ in the paper.
-  
+
 ### Setting the Input Program
 
 ```
@@ -62,7 +62,7 @@ lsqc_solver.setdevice(qcdevice("dev", 5, [(0, 1), (1, 2), (1, 3), (3, 4)], 3))
 ```
 
 We only use a few properties of the QC device, so we use a minimalist class `qcdevice` to store these values.
-To construct a `qcdevice`, The below arguments are required. 
+To construct a `qcdevice`, The below arguments are required.
 (The last three are only for fidelity optimization.)
 1. `name`
 2. `nqubits`: the number of physical qubits
@@ -82,7 +82,7 @@ print(result)
 
 The `solve` method can also takes two optional arguemnts
 - `output_mode` can be `"IR"` or `"QASM"`. The former means our own IR.
-  
+
 - `output_file_name`
 
 The result of the above example is as below.
@@ -96,11 +96,11 @@ q_1: ┤ H ├┤ X ├┤ TDG ├┤ X ├┤ T ├┤ X ├┤ TDG ├┤ X �
 q_2: ───────■─────────────────────■───┤ T ├─────────────────────┤ X ├┤ TDG ├┤ X ├─╫──╫─┤M├
                                       └───┘                     └───┘└─────┘└───┘ ║  ║ └╥┘
 q_3: ─────────────────────────────────────────────────────────────────────────────╫──╫──╫─
-                                                                                  ║  ║  ║ 
+                                                                                  ║  ║  ║
 q_4: ─────────────────────────────────────────────────────────────────────────────╫──╫──╫─
-                                                                                  ║  ║  ║ 
+                                                                                  ║  ║  ║
 c: 5/═════════════════════════════════════════════════════════════════════════════╩══╩══╩═
-                                                                                  2  0  1 
+                                                                                  2  0  1
 """
 ```
 
@@ -126,15 +126,23 @@ routed_circuit, mapping = lsqc_solver.solve()
 
 ## BibTeX Citation
 ```
-@INPROCEEDINGS{tan&cong-iccad20-olsq,
-  author={B. {Tan} and J. {Cong}},
-  booktitle={2020 IEEE/ACM International Conference On Computer Aided Design (ICCAD)}, 
-  title={Optimal Layout Synthesis for Quantum Computing}, 
-  year={2020},
-  volume={},
-  number={},
-  pages={1-9},
-  doi={10.1145/3400302.3415620},
-  url={https://ieeexplore.ieee.org/abstract/document/9256696},
-  note={arXiv:2007.15671}}
+@InProceedings{iccad20-tan-cong-optimal-layout-synthesis,
+  author          = {Tan, Bochen and Cong, Jason},
+  booktitle       = {Proceedings of the 39th International Conference on Computer-Aided Design},
+  title           = {Optimal Layout Synthesis for Quantum Computing},
+  year            = {2020},
+  address         = {New York, NY, USA},
+  publisher       = {Association for Computing Machinery},
+  series          = {ICCAD '20},
+  archiveprefix   = {arXiv},
+  eprint          = {2007.15671},
+  primaryclass    = {quant-ph},
+  articleno       = {137},
+  doi             = {10.1145/3400302.3415620},
+  isbn            = {9781450380263},
+  keywords        = {quantum computing, scheduling, allocation, mapping, placement, layout synthesis},
+  location        = {Virtual Event, USA},
+  numpages        = {9},
+  url             = {https://doi.org/10.1145/3400302.3415620},
+}
 ```

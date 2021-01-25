@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="olsq",
-    version="0.1.dev8",
+    version="0.1.dev9",
     author="Daniel Bochen Tan",
     author_email="bctan@cs.ucla.edu",
     description="Optimal Layout Synthesis for Quantum Computing (OLSQ) for mapping and scheduling quantum circuits",
