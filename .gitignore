@@ -3,4 +3,5 @@ olsq.egg-info/
 dist/
 iccad/.ipynb_checkpoints/
 build/
+.DS_Store
 try.py
