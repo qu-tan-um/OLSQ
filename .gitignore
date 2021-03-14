@@ -5,3 +5,6 @@ iccad/.ipynb_checkpoints/
 build/
 .DS_Store
 try.py
+olsq/__pycache__
+olsq/olsq_cirq/__pycache__
+olsq/olsq_qiskit/__pycache__
