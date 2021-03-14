@@ -1,5 +1,0 @@
-
-
-
-def input_qiskit():
-

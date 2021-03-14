@@ -461,5 +461,5 @@ class OLSQ:
                                         final_mapping])
             return [result_depth, list_scheduled_gate_name, list_scheduled_gate_qubits, final_mapping]
         else:
-            return output_qasm(self.device, result_depth, list_scheduled_gate_name, list_scheduled_gate_qubits,
-                               final_mapping, True, output_file_name)
+            return [output_qasm(self.device, result_depth, list_scheduled_gate_name, list_scheduled_gate_qubits,
+                               final_mapping, True, output_file_name), final_mapping]
