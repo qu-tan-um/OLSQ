@@ -33,12 +33,11 @@ class OLSQ_qiskit(OLSQ):
         if circuit_qiskit is None:
             raise Exception("no input program")
 
-        if input_mode is None:
-            circuit_qiskit = circuit_qiskit.decompose()
-            program_qiskit= input_qasm(circuit_qiskit.qasm())
-
         if input_mode == "qasm":
             program_qiskit= input_qasm(circuit_qiskit)
+        else:
+            circuit_qiskit = circuit_qiskit.decompose()
+            program_qiskit= input_qasm(circuit_qiskit.qasm())
         
         super().setprogram([program_qiskit[0], program_qiskit[1], program_qiskit[2]], input_mode="IR")
 

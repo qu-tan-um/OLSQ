@@ -123,6 +123,29 @@ lsqc_solver.setdevicegraph(device_graph)
 # mapping is the final mapping from physical to logical
 routed_circuit, mapping = lsqc_solver.solve()
 ```
+## Qiskit Interface
+
+There are two arguments for the `setprogram` method of `OLSQ_qiskit`: if the second is `"qasm"`, then you can input a QASM string representing the quantum program as the first argument; if the second is `"qiskit"`, then you can input a `QuantumCircuit` object in Qiskit as the first argument.
+
+You can pass a `backend` from `IBMQ` to OLSQ using the `setdevice` method with the second argument set to `"ibm"`.
+
+The `solve` method returns an `QuantumCircuit` object and the final mapping from physical to logical qubits.
+
+```
+from qiskit import IBMQ
+from olsq.olsq_qiskit import OLSQ_qiskit
+
+lsqc_solver = OLSQ_qiskit("depth", "normal")
+
+lsqc_solver.setprogram(circuit, "qasm") # circuit is some QASM string
+
+provider = IBMQ.load_account()
+backend = provider.backends()[1] # change to your backend of choice
+
+lsqc_solver.setdevicegraph(backend, "ibm")
+
+routed_circuit, mapping = lsqc_solver.solve()
+```
 
 ## BibTeX Citation
 ```
