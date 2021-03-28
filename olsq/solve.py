@@ -9,17 +9,18 @@ def collision_extracting(g):
     L = len(g)
     for l in range(L):
         for ll in range(l + 1, L):
-            if isinstance(g[l], int) and isinstance(g[ll], int):
-                if g[l] == g[ll]:
+            if len(g[l]) == 1 and len(g[ll]) == 1:
+                if g[l][0] == g[ll][0]:
                     D.append((l, ll))
-            if isinstance(g[l], int) and isinstance(g[ll], int) == False:
-                if g[l] == g[ll][0] or g[l] == g[ll][1]:
+            if len(g[l]) == 1 and len(g[ll]) == 2:
+                if g[l][0] == g[ll][0] or g[l][0] == g[ll][1]:
                     D.append((l, ll))
-            if isinstance(g[l], int) == False and isinstance(g[ll], int):
-                if g[l][0] == g[ll] or g[l][1] == g[ll]:
+            if len(g[l]) == 2 and len(g[ll]) == 1:
+                if g[l][0] == g[ll][0] or g[l][1] == g[ll][0]:
                     D.append((l, ll))
-            if isinstance(g[l], int) == False and isinstance(g[ll], int) == False:
-                if (g[l][0] == g[ll][0] or g[l][0] == g[ll][1]) or (g[l][1] == g[ll][0] or g[l][1] == g[ll][1]):
+            if len(g[l]) == 2 and len(g[ll]) == 2:
+                if ((g[l][0] == g[ll][0] or g[l][0] == g[ll][1]) or
+                    (g[l][1] == g[ll][0] or g[l][1] == g[ll][1])):
                     D.append((l, ll))
     return D
 
@@ -28,10 +29,10 @@ def dependency_extracting(list_gate_qubits, count_program_qubit):
     list_dependency = []
     list_last_gate = [-1 for i in range(count_program_qubit)]
     for i, qubits in enumerate(list_gate_qubits):
-        if isinstance(qubits, int):
-            if list_last_gate[qubits] >= 0:
-                list_dependency.append((list_last_gate[qubits], i))
-            list_last_gate[qubits] = i
+        if len(qubits) == 1:
+            if list_last_gate[qubits[0]] >= 0:
+                list_dependency.append((list_last_gate[qubits[0]], i))
+            list_last_gate[qubits[0]] = i
 
         else:
             if list_last_gate[qubits[0]] >= 0:
@@ -76,19 +77,27 @@ class OLSQ:
         self.swap_duration = 0
         self.bound_depth = 0
 
-    def setdevice(self, device=None):
-        if device is None:
-            raise Exception("no device")
+    def setdevice(self, device):
         self.device = device
         self.count_physical_qubit = device.count_physical_qubit
         self.list_qubit_edge = device.list_qubit_edge
         self.swap_duration = device.swap_duration
-        if self.if_transition_based == True:
+        if self.if_transition_based:
             self.swap_duration = 1
 
-    def setprogram(self, program=None, input_mode=None):
-        if program is None:
-            raise Exception("no input program")
+    def setprogram(self, program, input_mode=None):
+        """
+        Example:
+            for the following circuit
+                q_0: ───────────────────■───
+                                        │  
+                q_1: ───────■───────────┼───
+                     ┌───┐┌─┴─┐┌─────┐┌─┴─┐
+                q_2: ┤ H ├┤ X ├┤ TDG ├┤ X ├─
+                     └───┘└───┘└─────┘└───┘ 
+            gates = ((2,), (1,2), (2,), (0,1))
+            gate_spec = ("h", "cx", "tdg", "cx")
+        """
         if input_mode == "IR":
             self.count_program_qubit = program[0]
             self.list_gate_qubits = program[1]
@@ -101,8 +110,8 @@ class OLSQ:
 
         push_forward_depth = [0 for i in range(self.count_program_qubit)]
         for qubits in self.list_gate_qubits:
-            if isinstance(qubits, int):
-                push_forward_depth[qubits] += 1
+            if len(qubits) == 1:
+                push_forward_depth[qubits[0]] += 1
             else:
                 tmp_depth = push_forward_depth[qubits[0]]
                 if tmp_depth < push_forward_depth[qubits[1]]:
@@ -141,7 +150,7 @@ class OLSQ:
         list_gate_two = list()
         list_gate_single = list()
         for l in range(count_gate):
-            if isinstance(list_gate_qubits[l], int):
+            if len(list_gate_qubits[l]) == 1:
                 list_gate_single.append(l)
             else:
                 list_gate_two.append(l)
@@ -243,7 +252,7 @@ class OLSQ:
                 if l in list_gate_single:
                     lsqc.add(space[l] >= 0, space[l] < count_physical_qubit)
                     for t in range(bound_depth):
-                        lsqc.add(Implies(time[l] == t, pi[list_gate_qubits[l]][t] == space[l]))
+                        lsqc.add(Implies(time[l] == t, pi[list_gate_qubits[l][0]][t] == space[l]))
                 elif l in list_gate_two:
                     lsqc.add(space[l] >= 0, space[l] < count_qubit_edge)
                     for k in range(count_qubit_edge):
@@ -365,9 +374,9 @@ class OLSQ:
                 for tmp_gate in range(count_gate):
                     if result_time[tmp_gate] == block:
                         qubits = list_gate_qubits[tmp_gate]
-                        if isinstance(qubits, int):
-                            real_time[tmp_gate] = list_depth_on_qubit[qubits] + 1
-                            list_depth_on_qubit[qubits] = real_time[tmp_gate]
+                        if len(qubits) == 1:
+                            real_time[tmp_gate] = list_depth_on_qubit[qubits[0]] + 1
+                            list_depth_on_qubit[qubits[0]] = real_time[tmp_gate]
                             map_to_block[real_time[tmp_gate]] = block
                         else:
                             real_time[tmp_gate] = list_depth_on_qubit[qubits[0]] + 1
@@ -417,7 +426,7 @@ class OLSQ:
             list_scheduled_gate_name[t].append(list_gate_name[l])
             if l in list_gate_single:
                 q = model[space[l]].as_long()
-                list_scheduled_gate_qubits[t].append(q)
+                list_scheduled_gate_qubits[t].append((q,))
             elif l in list_gate_two:
                 [q0, q1] = list_gate_qubits[l]
                 tmp_t = t
@@ -425,7 +434,7 @@ class OLSQ:
                     tmp_t = map_to_block[t]
                 q0 = model[pi[q0][tmp_t]].as_long()
                 q1 = model[pi[q1][tmp_t]].as_long()
-                list_scheduled_gate_qubits[t].append([q0, q1])
+                list_scheduled_gate_qubits[t].append((q0, q1))
             else:
                 raise Exception("Expect single- or two-qubit gate.")
 
@@ -442,14 +451,14 @@ class OLSQ:
             q0 = list_qubit_edge[k][0]
             q1 = list_qubit_edge[k][1]
             if self.swap_duration == 1:
-                list_scheduled_gate_qubits[t].append([q0, q1])
+                list_scheduled_gate_qubits[t].append((q0, q1))
                 list_scheduled_gate_name[t].append("SWAP")
             elif self.swap_duration == 3:
-                list_scheduled_gate_qubits[t].append([q0, q1])
+                list_scheduled_gate_qubits[t].append((q0, q1))
                 list_scheduled_gate_name[t].append("cx")
-                list_scheduled_gate_qubits[t - 1].append([q1, q0])
+                list_scheduled_gate_qubits[t - 1].append((q1, q0))
                 list_scheduled_gate_name[t - 1].append("cx")
-                list_scheduled_gate_qubits[t - 2].append([q0, q1])
+                list_scheduled_gate_qubits[t - 2].append((q0, q1))
                 list_scheduled_gate_name[t - 2].append("cx")
             else:
                 raise Exception("Expect SWAP duration one, or three (decomposed into CX gates)")
