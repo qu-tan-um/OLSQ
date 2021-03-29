@@ -95,7 +95,7 @@ class OLSQ_cirq(OLSQ):
 
         final_cirq_mapping = dict()
         for i in range(self.count_program_qubit):
-            final_cirq_mapping[ self.map_to_physical_qubit[i] ] = \ 
+            final_cirq_mapping[ self.map_to_physical_qubit[i] ] = \
                 self.map_to_physical_qubit[ final_mapping[i] ]
 
         return [circuit, final_cirq_mapping, objective_value]

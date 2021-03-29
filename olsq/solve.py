@@ -541,7 +541,7 @@ class OLSQ:
             objective_value = len(list_result_swap)
             print(f"result additional SWAP count = {objective_value}.")
         else:
-            objective_value = result_depth
+            objective_value = model[depth].as_long()
             print(f"result circuit depth = {objective_value}.")
 
         list_scheduled_gate_qubits = [[] for i in range(result_depth)]
