@@ -5,13 +5,14 @@ def output_qasm(device: qcdevice, result_depth: int,
                 list_scheduled_gate_name: list,
                 list_scheduled_gate_qubits: list,
                 final_mapping: list, if_measure: bool, file_name: str = None):
-    """ generate qasm output
-    By default: 1) the qasm sentences are separated by newline, 2) there is a
-    comment before every moment in the circuit, and 3) from the measurement, we
-    can read of the final mapping.  If in the original circuit (input to OLSQ)
-    a qubit has index i, then it will be measured at c[i] in the qasm string.
+    """Generate qasm output
+    By default: 1) the qasm sentences are separated by newline,
+    2) there is a comment before every moment in the circuit, and
+    3) from the measurement, we can read of the final mapping. 
+    If in the original circuit (input to OLSQ) a qubit has index i,
+    then it will be measured at c[i] in the qasm string.
 
-    args:
+    Args:
         device: use the same QC device as in OLSQ.setdevice()
         result_depth: depth of the scheduled circuit
         list_scheduled_gate_name: type/name of each gate
@@ -20,7 +21,7 @@ def output_qasm(device: qcdevice, result_depth: int,
         if_measure: if measure all qubits in the end
         file_name: (optional) a file to put the qasm string
 
-    returns:
+    Returns:
         output_str: a qasm string in the above mentioned format.
     """
 

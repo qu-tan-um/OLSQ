@@ -4,26 +4,26 @@ import pkgutil
 
 class qcdevice:
     """ QC device class.
-    It contains the necessary parameters of the quantum hardware for OLSQ.
+    Contains the necessary parameters of the quantum hardware for OLSQ.
     """
 
     def __init__(self, name: str, nqubits: int = None, connection: list = None,
                  swap_duration: int = None, fmeas: list = None, 
                  fsingle: list = None, ftwo: list = None):
         """ Create a QC device.
-        The user can either input the device parameters, or use existing ones
-        stored in olsq/devices/ in json format (especially for duplicating
-        paper results).  The parameters of existing devices are overriden if
-        inputs are provided.
+        The user can either input the device parameters, or use existing
+        ones stored in olsq/devices/ in json format (especially for
+        duplicating paper results).  The parameters of existing devices 
+        are overriden if inputs are provided.
 
         Args:
-            name: name for the device.  If it starts with "default_", existing
-                device is used; otherwise, more parameters are needed.
+            name: name for the device.  If it starts with "default_",
+                use existing device; otherwise, more parameters needed.
             nqubits: (optional) the number of physical qubits.
-            connection: (optional) the set of edges connecting physical qubits.
-            swap_duration: (optional) how many time units a SWAP gate takes.
+            connection: (optional) set of edges connecting qubits.
+            swap_duration: (optional) how many time units a SWAP takes.
             fmeas: (optional) measurement fidelity of each qubit.
-            fsingle: (optional) single-qubit gate fidelity of each qubit.
+            fsingle: (optional) single-qubit gate fidelity of each qubit
             ftwo: (optional) two-qubit gate fidelity of each edge.
 
         Example:
@@ -31,8 +31,8 @@ class qcdevice:
             >>> dev = qcdevice(name="default_ourense")
             To set up a new device
             >>> dev = qcdevice(name="dev", nqubits=5,
-                               connection=[(0, 1), (1, 2), (1, 3), (3, 4)],
-                               swap_duration=3)
+                    connection=[(0, 1), (1, 2), (1, 3), (3, 4)],
+                    swap_duration=3)
         """
 
         # typechecking for inputs

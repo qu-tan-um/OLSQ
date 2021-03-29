@@ -1,9 +1,9 @@
 def input_qasm(circ_str: str):
-    """ process an input qasm string
-    This is a simple qasm parser that works on many qasm files that I know of.
-    The current OLSQ formulation only support single-qubit gates and two-qubit
-    gates, so only those are processed.  This parser has some more assumptions:
-    1) each instruction starts in a new line, 2) two-qubit gates are cx or zz,
+    """Process an input qasm string
+    A simple qasm parser that works on many qasm files that I know of.
+    The current OLSQ formulation only support single and two-qubitgates,
+    so only those are processed.  This parser has some more assumptions:
+    1) each instruction in a newline, 2) two-qubit gates: cx or zz,
     and 3) there is only one array of qubits.
 
     Args:
@@ -34,12 +34,12 @@ def input_qasm(circ_str: str):
     for qasmline in circ_str.splitlines():
         words = qasmline.split()
         if not isinstance(words, list): continue # empty lines
-        
+        if len(words) == 0: continue
         grammar = len(words)
-        # grammer=2 -> single-qubit gate type then one qubit
-        #              |two-qubit gate type then two qubits separated by ","
-        # grammer=3 -> two-qubit gate type then two qubits separated by ", "
-        # grammer=1 or >3 -> incorrect, raise an error
+        # grammer=2 -> single-qubit_gate_name one_qubit
+        #              |two-qubit_gate_name one_qubit,one_qubit
+        # grammer=3 ->  two-qubit_gate_name one_qubit, one_qubit
+        # grammer=1 or >3 incorrect, raise an error
         
         if words[0] in ["OPENQASM", "include", "creg", "measure", "//"]:
             continue
@@ -49,14 +49,14 @@ def input_qasm(circ_str: str):
             continue
         
         if words[0] == 'cx' or words[0] == 'zz':
-            if grammar == 3: # qubits are separated by a comma and a space
+            if grammar == 3:
                 try:
                     qubit0 = int(words[1][2:-2])
                     qubit1 = int(words[2][2:-2])
                 except:
                     raise ValueError(f"{qasmline} invalid two-qubit gate.")
             
-            elif grammar == 2: # qubits are not separated by only a comma
+            elif grammar == 2:
                 qubits = words[1].split(',')
                 try:
                     qubit0 = int(qubits[0][2:-1])
