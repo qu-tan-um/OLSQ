@@ -1,4 +1,4 @@
-from cirq import Circuit, Moment, GateOperation, SWAP
+from cirq import Circuit, Moment, GateOperation, SWAP, CNOT
 import networkx as nx
 
 from olsq.solve import OLSQ
@@ -36,12 +36,15 @@ class OLSQ_cirq(OLSQ):
 
         qubit_edges = []
         for edge in list(device_graph.edges()):
-            qubit_edges.append( (map_physical_qubit_to[edge[0]],
-                                 map_physical_qubit_to[edge[1]]) )
-
+            qubit_edges.append( (self.map_physical_qubit_to[edge[0]],
+                                 self.map_physical_qubit_to[edge[1]]) )
+        if self.if_transition_based:
+            tmp = 1
+        else:
+            tmp = 3
         super().setdevice(
             qcdevice("cirq-dev", nqubits=count_physical_qubit,
-                     connection=tuple(qubit_edges), swap_duration=1) )
+                     connection=tuple(qubit_edges), swap_duration=tmp) )
 
     def setprogram(self, program_cirq: Circuit):
         """Translate input Cirq program/circuit to IR
@@ -68,30 +71,33 @@ class OLSQ_cirq(OLSQ):
             So the final mapping should be m(i) |-> m(f(i))
         """
 
-        result_depth, list_scheduled_gate_name, list_scheduled_gate_qubits,\
-            final_mapping, objective_value = super().solve(output_mode="IR")
+        (result_depth, list_scheduled_gate_name, list_scheduled_gate_qubits,
+            final_mapping, objective_value) = super().solve(output_mode="IR")
         
         # constructing the output Cirq Circuit object
         circuit = Circuit()
         for t in range(result_depth):
-            moment = Moment()
+            moment_with_swap = []
             for i, qubits in enumerate(list_scheduled_gate_qubits[t]):
                 if len(qubits) == 1:
-                    moment = moment.with_operation( 
+                    moment_with_swap.append( 
                         GateOperation( list_scheduled_gate_name[t][i],
-                            (self.map_to_physical_qubit[qubits],)      ) )
+                            (self.map_to_physical_qubit[qubits[0]],)   ) )
                 else:
                     if list_scheduled_gate_name[t][i] == "SWAP":
-                        moment = moment.with_operation(
-                            GateOperation(SWAP, 
+                        moment_with_swap.append(
+                            GateOperation(SWAP,
                                 (self.map_to_physical_qubit[qubits[0]],
                                  self.map_to_physical_qubit[qubits[1]]) ) )
                     else:
-                        moment = moment.with_operation(
-                            GateOperation(list_scheduled_gate_name[t][i],
+                        op_tmp = list_scheduled_gate_name[t][i]
+                        if list_scheduled_gate_name[t][i] == "cx":
+                            op_tmp = CNOT
+                        moment_with_swap.append(
+                            GateOperation(op_tmp,
                                 (self.map_to_physical_qubit[qubits[0]],
                                  self.map_to_physical_qubit[qubits[1]])   ) )
-            circuit += moment
+            circuit.append(moment_with_swap)
 
         final_cirq_mapping = dict()
         for i in range(self.count_program_qubit):

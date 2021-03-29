@@ -485,7 +485,7 @@ class OLSQ:
             self.swap_duration = self.device.swap_duration
             map_to_block = dict()
             real_time = [0 for i in range(count_gate)]
-            list_depth_on_qubit = [-1 for i in range(self.count_program_qubit)]
+            list_depth_on_qubit = [-1 for i in range(self.count_physical_qubit)]
             list_real_swap = []
             for block in range(result_depth):
                 for tmp_gate in range(count_gate):

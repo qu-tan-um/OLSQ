@@ -8,7 +8,7 @@ circuit_str = "OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[3];\nh q[2];\n" \
               "cx q[1], q[2];\ntdg q[2];\ncx q[0], q[2];\nt q[1];\nt q[2];\n" \
               "cx q[0], q[1];\nh q[2];\nt q[0];\ntdg q[1];\ncx q[0], q[1];\n"
 
-circuit_file = open('olsq/benchmarks/toffoli.qasm', 'r').read()
+circuit_file = open("olsq/benchmarks/toffoli.qasm", "r").read()
 
 device_tmp = qcdevice("ourense", 5, [(0, 1), (1, 2), (1, 3), (3, 4)], 3)
 

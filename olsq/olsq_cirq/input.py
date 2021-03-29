@@ -22,7 +22,8 @@ def input_cirq(circuit: Circuit, map_physical_qubit_to: dict):
     for operation in circuit.all_operations():
         list_gate_name.append(operation.gate)
         if len(operation.qubits) == 1:
-            list_gate_qubits.append(map_physical_qubit_to[operation.qubits[0]])
+            list_gate_qubits.append(
+                (map_physical_qubit_to[operation.qubits[0]],) )
         elif len(operation.qubits) == 2:
             list_gate_qubits.append(
                 (map_physical_qubit_to[operation.qubits[0]],
@@ -30,4 +31,5 @@ def input_cirq(circuit: Circuit, map_physical_qubit_to: dict):
         else:
             raise ValueError("Only support single-qubit and two-qubit gates.")
 
-    return [count_program_qubit,tuple(list_gate_qubits),tuple(list_gate_name)]
+    return [len(circuit.all_qubits()), tuple(list_gate_qubits),
+            tuple(list_gate_name)]
