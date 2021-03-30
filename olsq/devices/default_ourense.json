@@ -1,5 +1,5 @@
 {
-    "name": "default_ourense",
+    "name": "ourense",
     "swap_duration": 3,
     "count_physical_qubit": 5,
     "list_qubit_edge": [[0, 1], [1, 2], [1, 3], [3, 4]]

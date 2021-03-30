@@ -16,24 +16,24 @@ device_file = qcdevice("default_ourense")
 
 def test_olsq_depth_normal_circstr_devtmp():
     lsqc_solver = OLSQ("depth", "normal")
-    lsqc_solver.setprogram(circuit_str)
     lsqc_solver.setdevice(device_tmp)
+    lsqc_solver.setprogram(circuit_str)
     assert lsqc_solver.solve()[2] == 14
 
 def test_olsq_swap_normal_circfile_devfile():
     lsqc_solver = OLSQ("swap", "normal")
-    lsqc_solver.setprogram(circuit_file)
     lsqc_solver.setdevice(device_file)
+    lsqc_solver.setprogram(circuit_file)
     assert lsqc_solver.solve()[2] == 1
 
 def test_olsq_depth_transition_circfile_devfile():
     lsqc_solver = OLSQ("depth", "transition")
-    lsqc_solver.setprogram(circuit_file)
     lsqc_solver.setdevice(device_file)
+    lsqc_solver.setprogram(circuit_file)
     assert lsqc_solver.solve()[2] == 2
 
 def test_olsq_swap_transition_circstr_devtmp():
     lsqc_solver = OLSQ("swap", "transition")
-    lsqc_solver.setprogram(circuit_str)
     lsqc_solver.setdevice(device_tmp)
+    lsqc_solver.setprogram(circuit_str)
     assert lsqc_solver.solve()[2] == 1

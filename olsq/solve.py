@@ -6,6 +6,7 @@ from z3 import Int, IntVector, Bool, Optimize, Implies, And, Or, If, sat
 from olsq.input import input_qasm
 from olsq.output import output_qasm
 from olsq.device import qcdevice
+import pkgutil
 
 
 def collision_extracting(list_gate_qubits):
@@ -161,6 +162,12 @@ class OLSQ:
         """
         
         if input_mode == "IR":
+            self.count_program_qubit = program[0]
+            self.list_gate_qubits = program[1]
+            self.list_gate_name = program[2]
+        elif input_mode == "benchmark":
+            f = pkgutil.get_data(__name__, "benchmarks/" + program + ".qasm")
+            program = input_qasm(f.decode("utf-8"))
             self.count_program_qubit = program[0]
             self.list_gate_qubits = program[1]
             self.list_gate_name = program[2]

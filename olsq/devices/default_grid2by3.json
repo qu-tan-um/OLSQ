@@ -1,0 +1,9 @@
+{
+    "name": "grid2by3",
+    "swap_duration": 3,
+    "count_physical_qubit": 6,
+    "list_qubit_edge": [[0, 1], [1, 2], [0, 3], [1, 4], [2, 5], [3, 4], [4, 5]],
+    "list_fidelity_measure": [0.928, 0.928, 0.928, 0.928, 0.928, 0.928],
+    "list_fidelity_single":[0.999, 0.999, 0.999, 0.999, 0.999, 0.999],
+    "list_fidelity_two": [0.955, 0.955, 0.955, 0.955, 0.955, 0.955, 0.955]
+}
