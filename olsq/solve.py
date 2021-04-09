@@ -116,6 +116,9 @@ class OLSQ:
         # bound_depth is a hyperparameter
         self.bound_depth = 0
 
+        self.inpput_dependency = False
+        self.list_gate_dependency = []
+
     def setdevice(self, device: qcdevice):
         """Pass in parameters from the given device.  If in TB mode,
            swap_duration is set to 1 without modifying the device.
@@ -146,7 +149,8 @@ class OLSQ:
         Args:
             program: a qasm string, or a list of the three things in IR.
             input_mode: (optional) can be "IR" if the input has ben
-                translated to OLSQ IR.  Default mode assumes qasm input.
+                translated to OLSQ IR; can be "benchmark" to use one of
+                the benchmarks.  Default mode assumes qasm input.
 
         Example:
             For the following circuit
@@ -192,6 +196,38 @@ class OLSQ:
                     push_forward_depth[qubits[1]] = tmp_depth + 1
                     push_forward_depth[qubits[0]] = tmp_depth + 1
             self.bound_depth = max(push_forward_depth)
+
+    def setdependency(self, dependency: list):
+        """Specify dependency (non-commutation)
+
+        Args:
+            dependency: a list of gate index pairs
+        
+        Example:
+            For the following circuit
+                q_0: ───────────────────■───
+                                        │  
+                q_1: ───────■───────────┼───
+                     ┌───┐┌─┴─┐┌─────┐┌─┴─┐
+                q_2: ┤ H ├┤ X ├┤ TDG ├┤ X ├─
+                     └───┘└───┘└─────┘└───┘ 
+                gate   0    1     2     3
+            dependency = [(0,1), (1,2), (2,3)]
+
+            However, for this QAOA subcircuit (ZZ gates may have phase
+            parameters, but we neglect them for simplicity here)
+                         ┌──┐ ┌──┐
+                q_0: ────┤ZZ├─┤  ├─
+                     ┌──┐└┬─┘ │ZZ│  
+                q_1: ┤  ├─┼───┤  ├─
+                     │ZZ│┌┴─┐ └──┘
+                q_2: ┤  ├┤ZZ├──────
+                     └──┘└──┘ 
+                gate   0   1   2
+            dependency = []    # since ZZ gates are commutable
+        """
+        self.list_gate_dependency = dependency
+        self.inpput_dependency = True
 
     def solve(self, output_mode: str = None, output_file_name: str = None):
         """Formulate an SMT, pass it to z3 solver, and output results.
@@ -288,8 +324,10 @@ class OLSQ:
         for k in range(count_qubit_edge):
             list_count_overlap_edge.append(len(list_overlap_edge[k]))
 
-
-        list_gate_dependency = collision_extracting(list_gate_qubits)
+        if not self.inpput_dependency:
+            list_gate_dependency = collision_extracting(list_gate_qubits)
+        else:
+            list_gate_dependency = self.list_gate_dependency
 
         # index function: takes two physical qubit indices _p_ and _p'_,
         # and returns the index of the edge between them if there is one
@@ -486,6 +524,22 @@ class OLSQ:
             for t in range(result_depth):
                 if model[sigma[k][t]]:
                     list_result_swap.append((k, t))
+                    print(f"SWAP on physical edge ({list_qubit_edge[k][0]},"\
+                        + f"{list_qubit_edge[k][1]}) at time {t}")
+        for l in range(count_gate):
+            if len(list_gate_qubits[l]) == 1:
+                qq = list_gate_qubits[l][0]
+                tt = result_time[l]
+                print(f"Gate {l}: {list_gate_name[l]} {qq} on qubit "\
+                    + f"{model[pi[qq][tt]].as_long()} at time {tt}")
+            else:
+                qq = list_gate_qubits[l][0]
+                qqq = list_gate_qubits[l][1]
+                tt = result_time[l]
+                print(f"Gate {l}: {list_gate_name[l]} {qq}, {qqq} on qubits "\
+                    + f"{model[pi[qq][tt]].as_long()} and "\
+                    + f"{model[pi[qqq][tt]].as_long()} at time {tt}")
+
 
         # transition based
         if self.if_transition_based:
@@ -499,39 +553,37 @@ class OLSQ:
                     if result_time[tmp_gate] == block:
                         qubits = list_gate_qubits[tmp_gate]
                         if len(qubits) == 1:
+                            p0 = model[pi[qubits[0]][block]].as_long()
                             real_time[tmp_gate] = \
-                                list_depth_on_qubit[qubits[0]] + 1
-                            list_depth_on_qubit[qubits[0]] = \
+                                list_depth_on_qubit[p0] + 1
+                            list_depth_on_qubit[p0] = \
                                 real_time[tmp_gate]
                             map_to_block[real_time[tmp_gate]] = block
                         else:
-                            real_time[tmp_gate] = \
-                                list_depth_on_qubit[qubits[0]] + 1
-                            if real_time[tmp_gate] \
-                                < list_depth_on_qubit[qubits[1]] + 1:
-                                real_time[tmp_gate] = \
-                                    list_depth_on_qubit[qubits[1]] + 1
-                            list_depth_on_qubit[qubits[0]] = \
+                            p0 = model[pi[qubits[0]][block]].as_long()
+                            p1 = model[pi[qubits[1]][block]].as_long()
+                            real_time[tmp_gate] = max(
+                                list_depth_on_qubit[p0],
+                                list_depth_on_qubit[p1]) + 1
+                            list_depth_on_qubit[p0] = \
                                 real_time[tmp_gate]
-                            list_depth_on_qubit[qubits[1]] = \
+                            list_depth_on_qubit[p1] = \
                                 real_time[tmp_gate]
                             map_to_block[real_time[tmp_gate]] = block
+                            # print(f"{tmp_gate} {p0} {p1} real-time={real_time[tmp_gate]}")
 
                 if block < result_depth - 1:
                     for (k, t) in list_result_swap:
                         if t == block:
-                            q0 = list_qubit_edge[k][0]
-                            q1 = list_qubit_edge[k][1]
-                            tmp_time = list_depth_on_qubit[q0] \
+                            p0 = list_qubit_edge[k][0]
+                            p1 = list_qubit_edge[k][1]
+                            tmp_time = max(list_depth_on_qubit[p0],
+                                list_depth_on_qubit[p1]) \
                                 + self.swap_duration
-                            if tmp_time < list_depth_on_qubit[q1] \
-                                + self.swap_duration:
-                                tmp_time = list_depth_on_qubit[q1] \
-                                    + self.swap_duration
-                            list_depth_on_qubit[q0] = tmp_time
-                            list_depth_on_qubit[q1] = tmp_time
+                            list_depth_on_qubit[p0] = tmp_time
+                            list_depth_on_qubit[p1] = tmp_time
                             list_real_swap.append((k, tmp_time))
-
+                # print(list_depth_on_qubit)
             result_time = real_time
             real_depth = 0
             for tmp_depth in list_depth_on_qubit:
@@ -539,6 +591,7 @@ class OLSQ:
                     real_depth = tmp_depth + 1
             result_depth = real_depth
             list_result_swap = list_real_swap
+            # print(list_result_swap)
         
         objective_value = 0
         if objective_name == "fidelity":

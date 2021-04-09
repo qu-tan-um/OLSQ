@@ -196,7 +196,7 @@ lsqc_solver.setprogram(circuit)
 provider = IBMQ.load_account()
 backend = provider.get_backend("ibmq_lima") # change to your backend of choice
 # use an IBMQ backend as the device
-lsqc_solver.setdevicegraph(backend, "ibm")
+lsqc_solver.setdevice(backend, "ibm")
 
 # result_circuit is a qiskit.QuantumCircuit object
 result_circuit, final_mapping, objective_value = lsqc_solver.solve()
