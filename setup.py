@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="olsq",
-    version="0.0.3",
+    version="0.0.4",
     license = "BSD",
     author="Daniel Bochen Tan",
     author_email="bctan@cs.ucla.edu",
