@@ -30,20 +30,21 @@ def collision_extracting(list_gate_qubits):
             
             if list_gate_qubits[g][0] == list_gate_qubits[gg][0]:
                     list_collision.append((g, gg))
-                
-            if len(list_gate_qubits[gg]) == 2:
-                if list_gate_qubits[g][0] == list_gate_qubits[gg][1]:
+                    continue
+            if list_gate_qubits[g][0] == list_gate_qubits[gg][1]:
                     list_collision.append((g, gg))
-            
-            if len(list_gate_qubits[g]) == 2:
-                if list_gate_qubits[g][1] == list_gate_qubits[gg][0]:
+                    continue
+            if list_gate_qubits[g][1] == list_gate_qubits[gg][0]:
                     list_collision.append((g, gg))
-                if len(list_gate_qubits[gg]) == 2:
-                    if list_gate_qubits[g][1] == list_gate_qubits[gg][1]:
-                        list_collision.append((g, gg))
-    
-    return tuple(list_collision)
+                    continue
+            if list_gate_qubits[g][1] == list_gate_qubits[gg][1]:
+                    list_collision.append((g, gg))
+                    continue
+    # print("original collision:")
+    # print(list_collision)
+    return list_collision
 
+# this is not used for iccad21 paper
 def dependency_extracting(list_gate_qubits, count_program_qubit: int):
     """Extract dependency relations between the gates.
     If two gates g_1 and g_2 both acts on a qubit *and there is no gate
@@ -79,11 +80,11 @@ def dependency_extracting(list_gate_qubits, count_program_qubit: int):
 
 class OLSQ:
     def __init__(self, objective_name, mode):
-        """Set the objective of OLSQ, and whether it is transition-based
+        """Set the objective of OLSQ
 
         Args:
             objective_name: can be "depth", "swap", or "fidelity"
-            mode: can be "normal" or "transition" (TB-OLSQ in the paper)       
+            mode: can be "normal" or "transition"
         """
         
         if objective_name == "depth":
@@ -116,23 +117,33 @@ class OLSQ:
         # bound_depth is a hyperparameter
         self.bound_depth = 0
 
-        self.inpput_dependency = False
+        self.input_commutation = False
         self.list_gate_dependency = []
+        self.list_collision_only = []
+        self.all_commutation = []
+        self.if_all_commute = False
 
-    def setdevice(self, device: qcdevice):
+        self.speedup = False
+
+        self.if_set_mapping = False
+        self.initial_mapping = []
+
+    def setdevice(self, device: qcdevice, if_speedup = None):
         """Pass in parameters from the given device.  If in TB mode,
            swap_duration is set to 1 without modifying the device.
 
         Args:
             device: a qcdevice object for OLSQ
+            if_speedup: if using alternating matchings
         """
 
         self.device = device
         self.count_physical_qubit = device.count_physical_qubit
         self.list_qubit_edge = device.list_qubit_edge
         self.swap_duration = device.swap_duration
-        if self.if_transition_based:
-            self.swap_duration = 1
+
+        if if_speedup:
+            self.speedup = True
 
     def setprogram(self, program, input_mode: str = None):
         """Translate input program to OLSQ IR, and set initial depth
@@ -182,52 +193,51 @@ class OLSQ:
             self.list_gate_name = program[2]
 
         # calculate the initial depth
-        if self.if_transition_based:
-            self.bound_depth = 1
-        else:
-            push_forward_depth = [0 for i in range(self.count_program_qubit)]
-            for qubits in self.list_gate_qubits:
-                if len(qubits) == 1:
-                    push_forward_depth[qubits[0]] += 1
-                else:
-                    tmp_depth = push_forward_depth[qubits[0]]
-                    if tmp_depth < push_forward_depth[qubits[1]]:
-                        tmp_depth = push_forward_depth[qubits[1]]
-                    push_forward_depth[qubits[1]] = tmp_depth + 1
-                    push_forward_depth[qubits[0]] = tmp_depth + 1
-            self.bound_depth = max(push_forward_depth)
+        push_forward_depth = [0 for i in range(self.count_program_qubit)]
+        for qubits in self.list_gate_qubits:
+            tmp_depth = push_forward_depth[qubits[0]]
+            if tmp_depth < push_forward_depth[qubits[1]]:
+                tmp_depth = push_forward_depth[qubits[1]]
+            push_forward_depth[qubits[1]] = tmp_depth + 1
+            push_forward_depth[qubits[0]] = tmp_depth + 1
+        self.bound_depth = max(push_forward_depth)
 
-    def setdependency(self, dependency: list):
-        """Specify dependency (non-commutation)
-
-        Args:
-            dependency: a list of gate index pairs
-        
-        Example:
-            For the following circuit
-                q_0: ───────────────────■───
-                                        │  
-                q_1: ───────■───────────┼───
-                     ┌───┐┌─┴─┐┌─────┐┌─┴─┐
-                q_2: ┤ H ├┤ X ├┤ TDG ├┤ X ├─
-                     └───┘└───┘└─────┘└───┘ 
-                gate   0    1     2     3
-            dependency = [(0,1), (1,2), (2,3)]
-
-            However, for this QAOA subcircuit (ZZ gates may have phase
-            parameters, but we neglect them for simplicity here)
-                         ┌──┐ ┌──┐
-                q_0: ────┤ZZ├─┤  ├─
-                     ┌──┐└┬─┘ │ZZ│  
-                q_1: ┤  ├─┼───┤  ├─
-                     │ZZ│┌┴─┐ └──┘
-                q_2: ┤  ├┤ZZ├──────
-                     └──┘└──┘ 
-                gate   0   1   2
-            dependency = []    # since ZZ gates are commutable
+    def setcommutation(self, commutation: list, if_all_commute=None):
+        """Deduct the commutations from the collision list
         """
-        self.list_gate_dependency = dependency
-        self.inpput_dependency = True
+        self.list_gate_commutation = commutation
+        self.input_commutation = True
+
+
+        gate_depth = [0 for _ in range(self.count_program_qubit)]
+        for gate in self.list_gate_qubits:
+            gate_depth[gate[0]] += 1
+            gate_depth[gate[1]] += 1
+        self.bound_depth = max(gate_depth)
+        if if_all_commute:
+            self.if_all_commute = True
+            return
+        
+        count_gate = len(self.list_gate_qubits)
+        dist = [[1024 for _ in range(count_gate)] for _ in range(count_gate)]
+        for comm in commutation:
+            dist[comm[0]][comm[1]] = 1
+            dist[comm[1]][comm[0]] = 1
+        for lll in range(count_gate):
+            for l in range(count_gate):
+                for ll in range(count_gate):
+                    if dist[l][ll] > dist[l][lll] + dist[lll][ll]:
+                        dist[l][ll] = dist[l][lll] + dist[lll][ll]
+        for l in range(count_gate):
+            for ll in range(l + 1, count_gate):
+                if dist[l][ll] < 1024:
+                    self.all_commutation.append((l,ll))
+
+    def setmapping(self, mapping: list):
+        """Set the initial mapping
+        """
+        self.if_set_mapping = True
+        self.initial_mapping = mapping
 
     def solve(self, output_mode: str = None, output_file_name: str = None):
         """Formulate an SMT, pass it to z3 solver, and output results.
@@ -259,6 +269,7 @@ class OLSQ:
         list_qubit_edge = self.list_qubit_edge
         swap_duration = self.swap_duration
         bound_depth = self.bound_depth
+        list_collision_only = self.list_collision_only
 
         # pre-processing
 
@@ -274,13 +285,6 @@ class OLSQ:
             list_logfidelity_measure = [
                 int(1000 * math.log(device.list_fidelity_measure[n]))
                 for n in range(count_physical_qubit)]
-        list_gate_two = list()
-        list_gate_single = list()
-        for l in range(count_gate):
-            if len(list_gate_qubits[l]) == 1:
-                list_gate_single.append(l)
-            else:
-                list_gate_two.append(l)
 
         # list_adjacency_qubit takes in a physical qubit index _p_, and
         # returns the list of indices of physical qubits adjacent to _p_
@@ -324,18 +328,24 @@ class OLSQ:
         for k in range(count_qubit_edge):
             list_count_overlap_edge.append(len(list_overlap_edge[k]))
 
-        if not self.inpput_dependency:
-            list_gate_dependency = collision_extracting(list_gate_qubits)
+        list_gate_collision = collision_extracting(list_gate_qubits)
+        list_gate_dependency = []
+        if self.input_commutation:
+            if self.if_all_commute:
+                list_collision_only = list_gate_collision
+            else:
+                for d in list_gate_collision:
+                    if_true_dependency = True
+                    for comm in self.all_commutation:
+                        if d[0] == comm[0] and d[1] == comm[1]:
+                            list_collision_only.append(d)
+                            if_true_dependency = False
+                            break
+                    if if_true_dependency:
+                        list_gate_dependency.append(d)
         else:
-            list_gate_dependency = self.list_gate_dependency
-
-        # index function: takes two physical qubit indices _p_ and _p'_,
-        # and returns the index of the edge between them if there is one
-        map_edge_index = [[0] * count_physical_qubit] * count_physical_qubit
-        for k in range(count_qubit_edge):
-            map_edge_index[list_qubit_edge[k][0]][list_qubit_edge[k][1]] = k
-            map_edge_index[list_qubit_edge[k][1]][list_qubit_edge[k][0]] = k
-
+            list_gate_dependency = list_gate_collision
+        
         not_solved = True
         start_time = datetime.datetime.now()
         while not_solved:
@@ -354,7 +364,11 @@ class OLSQ:
             space = IntVector('space', count_gate)
 
             # if at cycle t, a SWAP finishing on edge k, then sigma[k][t]=1
-            sigma = [[Bool("ifswap_e{}_t{}".format(i, j))
+            sigma = [[Bool("excSwap_e{}_t{}".format(i, j))
+                for j in range(bound_depth)] for i in range(count_qubit_edge)]
+
+            # if at cycle t, an inclusive SWAP on edge k, then lamda[k][t]=1
+            lamda = [[Bool("incSwap_e{}_t{}".format(i, j))
                 for j in range(bound_depth)] for i in range(count_qubit_edge)]
 
             # for depth optimization
@@ -365,8 +379,6 @@ class OLSQ:
 
             # for fidelity optimization
             if objective_name == "fidelity":
-                u = [Int("num_1qbg_p{}".format(n))
-                     for n in range(count_physical_qubit)]
                 v = [Int("num_2qbg_e{}".format(k))
                      for k in range(count_qubit_edge)]
                 vv = [Int("num_swap_e{}".format(k))
@@ -378,6 +390,9 @@ class OLSQ:
             lsqc = Optimize()
 
             # constraint setting
+            if self.if_set_mapping:
+                for m in range(count_program_qubit):
+                    lsqc.add(pi[m][0] == self.initial_mapping[m])
 
             for t in range(bound_depth):
                 for m in range(count_program_qubit):
@@ -387,30 +402,29 @@ class OLSQ:
 
             for l in range(count_gate):
                 lsqc.add(time[l] >= 0, time[l] < bound_depth)
-                if l in list_gate_single:
-                    lsqc.add(space[l] >= 0, space[l] < count_physical_qubit)
+                lsqc.add(space[l] >= 0, space[l] < count_qubit_edge)
+                for k in range(count_qubit_edge):
                     for t in range(bound_depth):
-                        lsqc.add(Implies(time[l] == t,
-                            pi[list_gate_qubits[l][0]][t] == space[l]))
-                elif l in list_gate_two:
-                    lsqc.add(space[l] >= 0, space[l] < count_qubit_edge)
-                    for k in range(count_qubit_edge):
-                        for t in range(bound_depth):
-                            lsqc.add(Implies(And(time[l] == t, space[l] == k),
-                                Or(And(list_qubit_edge[k][0] == \
-                                        pi[list_gate_qubits[l][0]][t],
-                                    list_qubit_edge[k][1] == \
-                                        pi[list_gate_qubits[l][1]][t]),
-                                And(list_qubit_edge[k][1] == \
-                                        pi[list_gate_qubits[l][0]][t],
-                                    list_qubit_edge[k][0] == \
-                                        pi[list_gate_qubits[l][1]][t])  )    ))
-
-            for d in list_gate_dependency:
-                if self.if_transition_based:
-                    lsqc.add(time[d[0]] <= time[d[1]])
-                else:
+                        lsqc.add(Implies(And(time[l] == t, space[l] == k),
+                            Or(And(list_qubit_edge[k][0] == \
+                                    pi[list_gate_qubits[l][0]][t],
+                                list_qubit_edge[k][1] == \
+                                    pi[list_gate_qubits[l][1]][t]),
+                            And(list_qubit_edge[k][1] == \
+                                    pi[list_gate_qubits[l][0]][t],
+                                list_qubit_edge[k][0] == \
+                                    pi[list_gate_qubits[l][1]][t])  )    ))
+            
+            if self.if_transition_based:
+                if not self.if_all_commute:
+                    for d in list_gate_dependency:
+                        lsqc.add(time[d[0]] <= time[d[1]])
+            else:
+                for d in list_gate_dependency:
                     lsqc.add(time[d[0]] < time[d[1]])
+                if self.input_commutation:
+                    for d in list_collision_only:
+                        lsqc.add(time[d[0]] != time[d[1]])
 
             for t in range(min(swap_duration - 1, bound_depth)):
                 for k in range(count_qubit_edge):
@@ -426,43 +440,73 @@ class OLSQ:
                             lsqc.add(Implies(sigma[k][t] == True,
                                 sigma[kk][tt] == False))
 
-            if not self.if_transition_based:
-                for t in range(swap_duration - 1, bound_depth):
-                    for k in range(count_qubit_edge):
-                        for tt in range(t - swap_duration + 1, t + 1):
-                            for l in range(count_gate):
-                                if l in list_gate_single:
-                                    lsqc.add(Implies(And(time[l] == tt,
-                                        Or(space[l] == list_qubit_edge[k][0],
-                                           space[l] == list_qubit_edge[k][1])),
-                                            sigma[k][t] == False             ))
-                                elif l in list_gate_two:
-                                    lsqc.add(Implies(And(
-                                        time[l] == tt, space[l] == k),
-                                            sigma[k][t] == False           ))
-                                    for kk in list_overlap_edge[k]:
-                                        lsqc.add(Implies(And(
-                                            time[l] == tt, space[l] == kk),
-                                                sigma[k][t] == False       ))
+            for t in range(swap_duration - 1, bound_depth):
+                for k in range(count_qubit_edge):
+                    for tt in range(t - swap_duration + 1, t + 1):
+                        for l in range(count_gate):
+                            lsqc.add(Implies(And(
+                                time[l] == tt, space[l] == k),
+                                    sigma[k][t] == False           ))
+                            for kk in list_overlap_edge[k]:
+                                lsqc.add(Implies(And(
+                                    time[l] == tt, space[l] == kk),
+                                        sigma[k][t] == False       ))
+
+            for t in range(bound_depth - 1):
+                for k in range(count_qubit_edge):
+                    lsqc.add(
+                        Implies(sum([If(And(time[l] == t, space[l] == k), 1, 0)
+                            for l in range(count_gate)]) == 0, lamda[k][t] == False))
 
             for t in range(bound_depth - 1):
                 for n in range(count_physical_qubit):
                     for m in range(count_program_qubit):
                         lsqc.add(
-                            Implies(And(sum([If(sigma[k][t], 1, 0)
+                            Implies(And(sum([If(Or(sigma[k][t], lamda[k][t]), 1, 0)
                                 for k in list_span_edge[n]]) == 0,
                                     pi[m][t] == n), pi[m][t + 1] == n))
 
             for t in range(bound_depth - 1):
                 for k in range(count_qubit_edge):
                     for m in range(count_program_qubit):
-                        lsqc.add(Implies(And(sigma[k][t] == True,
+                        lsqc.add(Implies(And( Or(sigma[k][t], lamda[k][t]),
                             pi[m][t] == list_qubit_edge[k][0]),
                                 pi[m][t + 1] == list_qubit_edge[k][1]))
-                        lsqc.add(Implies(And(sigma[k][t] == True,
+                        lsqc.add(Implies(And( Or(sigma[k][t], lamda[k][t]),
                             pi[m][t] == list_qubit_edge[k][1]),
                                 pi[m][t + 1] == list_qubit_edge[k][0]))
 
+            if self.speedup:
+                if "linear" in self.device.name:
+                    for t in range(bound_depth):
+                        for k in range(count_qubit_edge):
+                            if (t - k) % 2 == 1:
+                                lsqc.add(sigma[k][t] == False)
+                                for l in range(count_gate):
+                                    lsqc.add(Implies(time[l] == t, space[l] != k))
+                if "sycamore" in self.device.name:
+                    for k in [0, 3, 5, 10, 12, 18, 20, 27]:
+                        if t % 4 != 0:
+                            lsqc.add(sigma[k][t] == False)
+                            for l in range(count_gate):
+                                lsqc.add(Implies(time[l] == t, space[l] != k))
+                    for k in [1, 6, 8, 14, 16, 22, 24, 29]:
+                        if t % 4 != 1:
+                            lsqc.add(sigma[k][t] == False)
+                            for l in range(count_gate):
+                                lsqc.add(Implies(time[l] == t, space[l] != k))
+                    for k in [4, 11, 13, 19, 21, 26, 28, 31]:
+                        if t % 4 != 2:
+                            lsqc.add(sigma[k][t] == False)
+                            for l in range(count_gate):
+                                lsqc.add(Implies(time[l] == t, space[l] != k))
+                    for k in [2, 7, 9, 15, 17, 23, 25, 30]:
+                        if t % 4 != 3:
+                            lsqc.add(sigma[k][t] == False)
+                            for l in range(count_gate):
+                                lsqc.add(Implies(time[l] == t, space[l] != k))
+
+            
             lsqc.add(
                 count_swap == sum([If(sigma[k][t], 1, 0)
                     for k in range(count_qubit_edge)
@@ -478,13 +522,11 @@ class OLSQ:
                 lsqc.minimize(depth)
             elif objective_name == "fidelity":
                 for n in range(count_physical_qubit):
-                    lsqc.add(u[n] == sum([If(space[l] == n, 1, 0)
-                        for l in list_gate_single]))
                     lsqc.add(w[n] == sum([If(pi[m][bound_depth - 1] == n, 1, 0)
                         for m in range(count_program_qubit)]))
                 for k in range(count_qubit_edge):
                     lsqc.add(v[k] == sum([If(space[l] == k, 1, 0)
-                        for l in list_gate_two]))
+                        for l in range(count_gate)]))
                     lsqc.add(vv[k] == sum([If(sigma[k][t], 1, 0)
                         for t in range(bound_depth)]))
 
@@ -494,9 +536,7 @@ class OLSQ:
                         swap_duration * vv[k] * list_logfidelity_two[k]
                         for k in range(count_qubit_edge)])
                     + sum([w[n] * list_logfidelity_measure[n]
-                        for n in range(count_physical_qubit)])
-                    + sum([u[n] * list_logfidelity_single[n]
-                        for n in range(count_physical_qubit)])          )
+                        for n in range(count_physical_qubit)]) )
                 lsqc.maximize(fidelity)
             else:
                 raise Exception("Invalid Objective Name")
@@ -505,10 +545,7 @@ class OLSQ:
             if satisfiable == sat:
                 not_solved = False
             else:
-                if self.if_transition_based:
-                    bound_depth += 1
-                else:
-                    bound_depth = int(1.3 * bound_depth)
+                bound_depth += 1
 
         print(f"Compilation time = {datetime.datetime.now() - start_time}.")
         model = lsqc.model()
@@ -520,78 +557,23 @@ class OLSQ:
         for l in range(count_gate):
             result_time.append(model[time[l]].as_long())
         list_result_swap = []
-        for k in range(count_qubit_edge):
-            for t in range(result_depth):
+        for t in range(result_depth):
+            for k in range(count_qubit_edge):
                 if model[sigma[k][t]]:
                     list_result_swap.append((k, t))
-                    print(f"SWAP on physical edge ({list_qubit_edge[k][0]},"\
+                    print(f"excSWAP on physical edge ({list_qubit_edge[k][0]},"\
+                        + f"{list_qubit_edge[k][1]}) at time {t}")
+                if model[lamda[k][t]]:
+                    print(f"incSWAP on physical edge {k} ({list_qubit_edge[k][0]},"\
                         + f"{list_qubit_edge[k][1]}) at time {t}")
         for l in range(count_gate):
-            if len(list_gate_qubits[l]) == 1:
-                qq = list_gate_qubits[l][0]
-                tt = result_time[l]
-                print(f"Gate {l}: {list_gate_name[l]} {qq} on qubit "\
-                    + f"{model[pi[qq][tt]].as_long()} at time {tt}")
-            else:
-                qq = list_gate_qubits[l][0]
-                qqq = list_gate_qubits[l][1]
-                tt = result_time[l]
-                print(f"Gate {l}: {list_gate_name[l]} {qq}, {qqq} on qubits "\
-                    + f"{model[pi[qq][tt]].as_long()} and "\
-                    + f"{model[pi[qqq][tt]].as_long()} at time {tt}")
-
-
-        # transition based
-        if self.if_transition_based:
-            self.swap_duration = self.device.swap_duration
-            map_to_block = dict()
-            real_time = [0 for i in range(count_gate)]
-            list_depth_on_qubit = [-1 for i in range(self.count_physical_qubit)]
-            list_real_swap = []
-            for block in range(result_depth):
-                for tmp_gate in range(count_gate):
-                    if result_time[tmp_gate] == block:
-                        qubits = list_gate_qubits[tmp_gate]
-                        if len(qubits) == 1:
-                            p0 = model[pi[qubits[0]][block]].as_long()
-                            real_time[tmp_gate] = \
-                                list_depth_on_qubit[p0] + 1
-                            list_depth_on_qubit[p0] = \
-                                real_time[tmp_gate]
-                            map_to_block[real_time[tmp_gate]] = block
-                        else:
-                            p0 = model[pi[qubits[0]][block]].as_long()
-                            p1 = model[pi[qubits[1]][block]].as_long()
-                            real_time[tmp_gate] = max(
-                                list_depth_on_qubit[p0],
-                                list_depth_on_qubit[p1]) + 1
-                            list_depth_on_qubit[p0] = \
-                                real_time[tmp_gate]
-                            list_depth_on_qubit[p1] = \
-                                real_time[tmp_gate]
-                            map_to_block[real_time[tmp_gate]] = block
-                            # print(f"{tmp_gate} {p0} {p1} real-time={real_time[tmp_gate]}")
-
-                if block < result_depth - 1:
-                    for (k, t) in list_result_swap:
-                        if t == block:
-                            p0 = list_qubit_edge[k][0]
-                            p1 = list_qubit_edge[k][1]
-                            tmp_time = max(list_depth_on_qubit[p0],
-                                list_depth_on_qubit[p1]) \
-                                + self.swap_duration
-                            list_depth_on_qubit[p0] = tmp_time
-                            list_depth_on_qubit[p1] = tmp_time
-                            list_real_swap.append((k, tmp_time))
-                # print(list_depth_on_qubit)
-            result_time = real_time
-            real_depth = 0
-            for tmp_depth in list_depth_on_qubit:
-                if real_depth < tmp_depth + 1:
-                    real_depth = tmp_depth + 1
-            result_depth = real_depth
-            list_result_swap = list_real_swap
-            # print(list_result_swap)
+            qq = list_gate_qubits[l][0]
+            qqq = list_gate_qubits[l][1]
+            tt = result_time[l]
+            print(f"Gate {l}: {list_gate_name[l]} {qq}, {qqq} on qubits "\
+                + f"{model[pi[qq][tt]].as_long()} and "\
+                + f"{model[pi[qqq][tt]].as_long()} at time {tt}")
+        
         
         objective_value = 0
         if objective_name == "fidelity":
@@ -603,6 +585,9 @@ class OLSQ:
         else:
             objective_value = model[depth].as_long()
             print(f"result circuit depth = {objective_value}.")
+        
+        for i in range(count_program_qubit):
+            print(f"program qubit {i} is mapped to physical qubit {model[pi[i][0]]} initially.")
 
         list_scheduled_gate_qubits = [[] for i in range(result_depth)]
         list_scheduled_gate_name = [[] for i in range(result_depth)]
@@ -613,34 +598,38 @@ class OLSQ:
             if result_depth < t + 1:
                 result_depth = t + 1
 
-            list_scheduled_gate_name[t].append(list_gate_name[l])
-            if l in list_gate_single:
-                q = model[space[l]].as_long()
-                list_scheduled_gate_qubits[t].append((q,))
-            elif l in list_gate_two:
-                [q0, q1] = list_gate_qubits[l]
-                tmp_t = t
-                if self.if_transition_based:
-                    tmp_t = map_to_block[t]
-                q0 = model[pi[q0][tmp_t]].as_long()
-                q1 = model[pi[q1][tmp_t]].as_long()
-                list_scheduled_gate_qubits[t].append((q0, q1))
+           
+            [q0, q1] = list_gate_qubits[l]
+            tmp_t = t
+            q0 = model[pi[q0][tmp_t]].as_long()
+            q1 = model[pi[q1][tmp_t]].as_long()
+            list_scheduled_gate_qubits[t].append((q0, q1))
+            if_incswap = False
+            for k in range(count_qubit_edge):
+                if (list_qubit_edge[k][0] == q0 and list_qubit_edge[k][1] == q1) or (list_qubit_edge[k][1] == q0 and list_qubit_edge[k][0] == q1):
+                    if model[ lamda[k][t] ]:
+                        if_incswap = True
+            
+            if if_incswap:
+                list_scheduled_gate_name[t].append(list_gate_name[l]+"+incSWAP")
             else:
-                raise ValueError("Expect single-qubit or two-qubit gate.")
+                list_scheduled_gate_name[t].append(list_gate_name[l])
 
         final_mapping = []
         for m in range(count_program_qubit):
             tmp_depth = result_depth - 1
-            if self.if_transition_based:
-                tmp_depth = map_to_block[result_depth - 1]
             final_mapping.append(model[pi[m][tmp_depth]].as_long())
+
+        initial_mapping = []
+        for m in range(count_program_qubit):
+            initial_mapping.append(model[pi[m][0]].as_long())
 
         for (k, t) in list_result_swap:
             q0 = list_qubit_edge[k][0]
             q1 = list_qubit_edge[k][1]
             if self.swap_duration == 1:
                 list_scheduled_gate_qubits[t].append((q0, q1))
-                list_scheduled_gate_name[t].append("SWAP")
+                list_scheduled_gate_name[t].append("excSWAP")
             elif self.swap_duration == 3:
                 list_scheduled_gate_qubits[t].append((q0, q1))
                 list_scheduled_gate_name[t].append("cx")
@@ -661,6 +650,7 @@ class OLSQ:
             return (result_depth,
                     list_scheduled_gate_name,
                     list_scheduled_gate_qubits,
+                    initial_mapping,
                     final_mapping,
                     objective_value)
         else:

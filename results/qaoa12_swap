@@ -1,0 +1,42 @@
+Trying maximal depth = 3...
+Trying maximal depth = 4...
+Compilation time = 0:56:51.782200.
+incSWAP on physical edge 4 (2,6) at time 1
+incSWAP on physical edge 5 (3,7) at time 1
+incSWAP on physical edge 6 (4,5) at time 1
+incSWAP on physical edge 15 (10,11) at time 1
+incSWAP on physical edge 0 (0,2) at time 2
+incSWAP on physical edge 11 (5,11) at time 2
+incSWAP on physical edge 17 (12,13) at time 2
+incSWAP on physical edge 19 (10,16) at time 2
+Gate 0: ZZ 9, 10 on qubits 6 and 7 at time 2
+Gate 1: ZZ 9, 0 on qubits 2 and 6 at time 1
+Gate 2: ZZ 9, 8 on qubits 2 and 0 at time 0
+Gate 3: ZZ 10, 7 on qubits 3 and 7 at time 1
+Gate 4: ZZ 10, 3 on qubits 7 and 13 at time 3
+Gate 5: ZZ 2, 4 on qubits 16 and 10 at time 0
+Gate 6: ZZ 2, 6 on qubits 10 and 4 at time 3
+Gate 7: ZZ 2, 5 on qubits 16 and 10 at time 2
+Gate 8: ZZ 4, 1 on qubits 11 and 5 at time 2
+Gate 9: ZZ 4, 5 on qubits 10 and 11 at time 1
+Gate 10: ZZ 1, 11 on qubits 11 and 12 at time 3
+Gate 11: ZZ 1, 6 on qubits 4 and 5 at time 1
+Gate 12: ZZ 11, 7 on qubits 13 and 7 at time 0
+Gate 13: ZZ 11, 3 on qubits 13 and 12 at time 2
+Gate 14: ZZ 7, 8 on qubits 3 and 2 at time 3
+Gate 15: ZZ 0, 6 on qubits 6 and 5 at time 0
+Gate 16: ZZ 0, 8 on qubits 2 and 0 at time 2
+Gate 17: ZZ 3, 5 on qubits 12 and 11 at time 0
+result additional SWAP count = 0.
+program qubit 0 is mapped to physical qubit 6 initially.
+program qubit 1 is mapped to physical qubit 4 initially.
+program qubit 2 is mapped to physical qubit 16 initially.
+program qubit 3 is mapped to physical qubit 12 initially.
+program qubit 4 is mapped to physical qubit 10 initially.
+program qubit 5 is mapped to physical qubit 11 initially.
+program qubit 6 is mapped to physical qubit 5 initially.
+program qubit 7 is mapped to physical qubit 7 initially.
+program qubit 8 is mapped to physical qubit 0 initially.
+program qubit 9 is mapped to physical qubit 2 initially.
+program qubit 10 is mapped to physical qubit 3 initially.
+program qubit 11 is mapped to physical qubit 13 initially.

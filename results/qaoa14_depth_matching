@@ -1,0 +1,52 @@
+Trying maximal depth = 3...
+Trying maximal depth = 4...
+Compilation time = 5:27:09.250215.
+incSWAP on physical edge 21 (12,18) at time 0
+incSWAP on physical edge 0 (0,2) at time 1
+excSWAP on physical edge (5,6) at time 1
+incSWAP on physical edge 10 (4,10) at time 1
+excSWAP on physical edge (11,12) at time 1
+excSWAP on physical edge (9,15) at time 1
+excSWAP on physical edge (16,17) at time 1
+incSWAP on physical edge 30 (20,21) at time 1
+incSWAP on physical edge 4 (2,6) at time 2
+incSWAP on physical edge 19 (10,16) at time 2
+incSWAP on physical edge 21 (12,18) at time 2
+incSWAP on physical edge 26 (15,19) at time 2
+excSWAP on physical edge (17,21) at time 2
+Gate 0: ZZ 4, 6 on qubits 21 and 17 at time 0
+Gate 1: ZZ 4, 5 on qubits 20 and 19 at time 3
+Gate 2: ZZ 4, 8 on qubits 21 and 20 at time 1
+Gate 3: ZZ 6, 1 on qubits 16 and 10 at time 2
+Gate 4: ZZ 6, 11 on qubits 10 and 11 at time 3
+Gate 5: ZZ 5, 13 on qubits 15 and 19 at time 2
+Gate 6: ZZ 5, 0 on qubits 9 and 10 at time 0
+Gate 7: ZZ 13, 8 on qubits 19 and 20 at time 0
+Gate 8: ZZ 13, 1 on qubits 15 and 16 at time 3
+Gate 9: ZZ 0, 1 on qubits 10 and 4 at time 1
+Gate 10: ZZ 0, 3 on qubits 4 and 5 at time 3
+Gate 11: ZZ 11, 10 on qubits 18 and 12 at time 0
+Gate 12: ZZ 11, 3 on qubits 11 and 5 at time 2
+Gate 13: ZZ 7, 10 on qubits 12 and 18 at time 2
+Gate 14: ZZ 7, 12 on qubits 11 and 5 at time 0
+Gate 15: ZZ 7, 8 on qubits 18 and 17 at time 3
+Gate 16: ZZ 10, 2 on qubits 12 and 6 at time 3
+Gate 17: ZZ 3, 9 on qubits 6 and 2 at time 0
+Gate 18: ZZ 9, 12 on qubits 0 and 2 at time 3
+Gate 19: ZZ 9, 2 on qubits 2 and 0 at time 1
+Gate 20: ZZ 2, 12 on qubits 2 and 6 at time 2
+result circuit depth = 4.
+program qubit 0 is mapped to physical qubit 10 initially.
+program qubit 1 is mapped to physical qubit 4 initially.
+program qubit 2 is mapped to physical qubit 0 initially.
+program qubit 3 is mapped to physical qubit 6 initially.
+program qubit 4 is mapped to physical qubit 21 initially.
+program qubit 5 is mapped to physical qubit 9 initially.
+program qubit 6 is mapped to physical qubit 17 initially.
+program qubit 7 is mapped to physical qubit 11 initially.
+program qubit 8 is mapped to physical qubit 20 initially.
+program qubit 9 is mapped to physical qubit 2 initially.
+program qubit 10 is mapped to physical qubit 12 initially.
+program qubit 11 is mapped to physical qubit 18 initially.
+program qubit 12 is mapped to physical qubit 5 initially.
+program qubit 13 is mapped to physical qubit 19 initially.

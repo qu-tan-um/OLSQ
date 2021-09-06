@@ -1,0 +1,32 @@
+Trying maximal depth = 3...
+Trying maximal depth = 4...
+Compilation time = 0:09:31.825216.
+incSWAP on physical edge 5 (3,7) at time 0
+incSWAP on physical edge 7 (5,6) at time 0
+incSWAP on physical edge 8 (6,7) at time 1
+incSWAP on physical edge 17 (12,13) at time 1
+incSWAP on physical edge 2 (2,3) at time 2
+incSWAP on physical edge 3 (1,5) at time 2
+incSWAP on physical edge 12 (6,12) at time 2
+incSWAP on physical edge 13 (7,13) at time 2
+Gate 0: ZZ 0, 1 on qubits 6 and 5 at time 0
+Gate 1: ZZ 0, 4 on qubits 1 and 2 at time 3
+Gate 2: ZZ 0, 3 on qubits 5 and 1 at time 2
+Gate 3: ZZ 1, 7 on qubits 7 and 13 at time 2
+Gate 4: ZZ 1, 6 on qubits 6 and 7 at time 1
+Gate 5: ZZ 2, 4 on qubits 2 and 3 at time 2
+Gate 6: ZZ 2, 7 on qubits 3 and 7 at time 3
+Gate 7: ZZ 2, 3 on qubits 2 and 1 at time 0
+Gate 8: ZZ 4, 6 on qubits 7 and 3 at time 0
+Gate 9: ZZ 7, 5 on qubits 12 and 13 at time 1
+Gate 10: ZZ 6, 5 on qubits 6 and 12 at time 2
+Gate 11: ZZ 3, 5 on qubits 5 and 6 at time 3
+result additional SWAP count = 0.
+program qubit 0 is mapped to physical qubit 6 initially.
+program qubit 1 is mapped to physical qubit 5 initially.
+program qubit 2 is mapped to physical qubit 2 initially.
+program qubit 3 is mapped to physical qubit 1 initially.
+program qubit 4 is mapped to physical qubit 7 initially.
+program qubit 5 is mapped to physical qubit 13 initially.
+program qubit 6 is mapped to physical qubit 3 initially.
+program qubit 7 is mapped to physical qubit 12 initially.
