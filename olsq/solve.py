@@ -544,7 +544,6 @@ class OLSQ:
         # transition based
         if self.if_transition_based:
             self.swap_duration = self.device.swap_duration
-            map_to_block = dict()
             real_time = [0 for i in range(count_gate)]
             list_depth_on_qubit = [-1 for i in range(self.count_physical_qubit)]
             list_real_swap = []
@@ -558,7 +557,6 @@ class OLSQ:
                                 list_depth_on_qubit[p0] + 1
                             list_depth_on_qubit[p0] = \
                                 real_time[tmp_gate]
-                            map_to_block[real_time[tmp_gate]] = block
                         else:
                             p0 = model[pi[qubits[0]][block]].as_long()
                             p1 = model[pi[qubits[1]][block]].as_long()
@@ -569,7 +567,6 @@ class OLSQ:
                                 real_time[tmp_gate]
                             list_depth_on_qubit[p1] = \
                                 real_time[tmp_gate]
-                            map_to_block[real_time[tmp_gate]] = block
                             # print(f"{tmp_gate} {p0} {p1} real-time={real_time[tmp_gate]}")
 
                 if block < result_depth - 1:
@@ -621,7 +618,7 @@ class OLSQ:
                 [q0, q1] = list_gate_qubits[l]
                 tmp_t = t
                 if self.if_transition_based:
-                    tmp_t = map_to_block[t]
+                    tmp_t = model[time[l]].as_long()
                 q0 = model[pi[q0][tmp_t]].as_long()
                 q1 = model[pi[q1][tmp_t]].as_long()
                 list_scheduled_gate_qubits[t].append((q0, q1))
@@ -632,7 +629,7 @@ class OLSQ:
         for m in range(count_program_qubit):
             tmp_depth = result_depth - 1
             if self.if_transition_based:
-                tmp_depth = map_to_block[result_depth - 1]
+                tmp_depth = model[depth].as_long() - 1
             final_mapping.append(model[pi[m][tmp_depth]].as_long())
 
         for (k, t) in list_result_swap:
