@@ -78,12 +78,12 @@ lsqc_solver.setdevice( qcdevice("default_ourense") )
 Apart from the device, we need the quantum program/circuit to execute, which can be set with the `setprogram` method.
 _To be safe, always set the device first and then the program._
 
-OLSQ has an intermediate representation (IR) of quantum programs. (For details, refer to [a later part](#olsq-ir) of this tutorial.)
-In general, there are four ways to set the program: 
-1. Use OLSQ IR
-2. Use a string in QASM format
-3. Use an QASM file, e.g., one of programs used in the paper in `olsq/benchmarks/`.
-4. Use programs defined in other packages: refer to later parts of this tutorial on [Cirq](#cirq-interface) and [Qiskit](#qiskit-interface).
+We recommend to use an intermediate representation (IR) of quantum programs specifically for OLSQ. Refer to [a later part](#olsq-ir) of this tutorial.
+
+There are other methods of input that are somewhat supported, but may be deprecated.
+1. Use a string in QASM format
+2. Use an QASM file, e.g., one of programs used in the paper in `olsq/benchmarks/`.
+3. Use programs defined in other packages: refer to later parts of this tutorial on [Cirq](#cirq-interface) and [Qiskit](#qiskit-interface).
 
 ```
 circuit_str = "OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[3];\nh q[2];\n" \
@@ -157,7 +157,7 @@ Note that a SWAP gate, decomposed into three CX gates, has been inserted.
 #                                                                                   2  0  1
 ```
 
-## Cirq Interface
+## Cirq Interface (deprecated, consider using the IR below)
 
 We can input a `networkx.Graph` object representing the devie to `setdevicegraph`.
 Note that the method name is different from `setdevice`.
@@ -178,7 +178,7 @@ lsqc_solver.setdevicegraph(device_graph)
 # result_circuit is a cirq.Circuit object
 result_circuit, final_mapping, objective_value = lsqc_solver.solve()
 ```
-## Qiskit Interface
+## Qiskit Interface (deprecated, consider using the IR below)
 
 A `backend` from `IBMQ` can be input to the `setdevice` method with the second argument set to `"ibm"`.
 
