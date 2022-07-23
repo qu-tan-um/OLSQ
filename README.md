@@ -2,7 +2,7 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2007.15671-brightgreen.svg?style=for-the-badge)](https://arxiv.org/abs/2007.15671)
 [![Unitary Fund](https://img.shields.io/badge/Supported%20By-UNITARY%20FUND-brightgreen.svg?style=for-the-badge)](http://unitary.fund)
 
-# OLSQ: Optimal Layout Synthesis for Quantum Computing
+# OLSQ (pronounced all-s-k): Optimal Layout Synthesis for Quantum Computing
 
 Many quantum computers have constraints on the connections between qubits.
 However, a quantum program may not conform to these constraints.
